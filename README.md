@@ -1,2 +1,3 @@
-# cloud_pi
-Uma rede social como Projeto integrador, para meu curso técnico no SENAC
+# cloud PI
+
+*Uma rede social como Projeto integrador, para meu curso técnico no SENAC*
