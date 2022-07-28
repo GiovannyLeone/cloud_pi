@@ -2,17 +2,23 @@
 require('../db/connect.php');
 include_once('../controller/class/cadastrar_user.class.php');
 
-$username = $_POST['username'];
-$userEmail = $_POST['email'];
-$userPassword = $_POST['password'];
+$username = $_POST['getFormUsername'];
+$userPassword = $_POST['getFormPassword'];
 $idStatus = 2;
+
+echo $username;
+echo $userPassword;
 
 
 
 
 $users = new User;
 $users->setUsername($username);
-$users->setUserEmail($userEmail);
+$users->setUserEmail($username);
 $users->setUserPassoword($userPassword);
 $users->setIdStatus($idStatus);
 $users->getUsers();
+
+if ($users->getUsers() === TRUE) {
+    return  header("Location: ../../public/feed.html");
+}

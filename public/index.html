@@ -24,9 +24,9 @@
             <h2>Cadastre-se</h2>
             <form method="POST">
               <div class="form-group myGrid">
-                <input type="text" placeholder="Username" name="setUsername" id="setUsername" />
-                <input type="text" placeholder="Password" name="setPassword" id="setPassword" />
-                <input type="email" placeholder="Email" name="setEmail" id="setEmail"/>
+                <input type="text" placeholder="Username" name="setFormUsername" id="setFormUsername" />
+                <input type="text" placeholder="Password" name="setFormPassword" id="setFormPassword" />
+                <input type="email" placeholder="Email" name="setFormEmail" id="setFormEmail"/>
               </div>
               <a id="goLeft" class="off">Entrar</a>
               <button id="btnSetUsers">Cadastre-se</button>
@@ -36,13 +36,13 @@
         <div class="right">
           <div class="content2">
             <h2>Entrar</h2>
-            <form method="post">
+            <form method="POST">
               <div class="form-group">
-                <input type="text" placeholder="Username" name="getUsername" id="getUsername" />
-                <input type="text" placeholder="Password" name="getPassword" id="getPassword" />
+                <input type="text" placeholder="Username" name="getFormUsername" id="getFormUsername" />
+                <input type="text" placeholder="Password" name="getFormPassword" id="getFormPassword" />
               </div>
               <a id="goRight" class="off">Cadastre-se</a>
-              <button id="btnGetUsers">Entrar</button>
+              <button id="btnGetUsers" type="submit">Entrar</button>
             </form>
           </div>
         </div>
@@ -53,5 +53,4 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="assets/js/script.js"></script>
 </body>
-
 </html>

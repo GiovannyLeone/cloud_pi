@@ -2,9 +2,9 @@
 require('../db/connect.php');
 include_once('../controller/class/cadastrar_user.class.php');
 
-$username = $_POST['username'];
-$userEmail = $_POST['email'];
-$userPassword = $_POST['password'];
+$username = $_POST['setFormUsername'];
+$userEmail = $_POST['setFormEmail'];
+$userPassword = $_POST['setFormPassword'];
 $hash = "06giovannydev";
 $idStatus = 2;
 

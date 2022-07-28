@@ -41,18 +41,18 @@ abreModal()
 
 $( "#btnSetUsers" ).click(() => {
 
-  let username = $('#setUsername').val()
-  let email = $('#setEmail').val()
-  let password = $('#setPassword').val()
+  let username = $('#setFormUsername').val()
+  let email = $('#setFormEmail').val()
+  let password = $('#setFormPassword').val()
 
   console.log(username + " | " + email + " | " + password);
   $.ajax({
     url: "../mvc/model/cadastrar_user.php",
     type: 'POST',
     data: {
-      username: username,
-      password: password,
-      email: email
+      setFormUsername: username,
+      setFormEmail: email,
+      setFormPassword: password
     }
   })
 
@@ -63,16 +63,16 @@ $( "#btnSetUsers" ).click(() => {
 
 $( "#btnGetUsers" ).click(() => {
 
-  let username = $('#getUsername').val()
-  let password = $('#getPassword').val()
+  let username = $('#getFormUsername').val()
+  let password = $('#getFormPassword').val()
 
   console.log(username  + " | " + password);
   $.ajax({
     url: "../mvc/model/login_user.php",
     type: 'POST',
     data: {
-      username: username,
-      password: password,
+      getFormUsername: username,
+      getFormPassword: password
     }
   })
 

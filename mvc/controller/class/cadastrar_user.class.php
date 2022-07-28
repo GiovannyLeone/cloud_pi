@@ -110,10 +110,10 @@ class User
         
         
         $stmt = $conn->prepare($consultQuerySQL);
-        $stmt->execute(["$this->username", "$this->userEmail", "$this->userPasword", 2]);
+        $stmt->execute(["$this->username", "$this->userEmail", "$this->userPassword", 2]);
 
-        if ($stmt->execute(["$this->username", "$this->userEmail", "$this->userPasword", 2]) === TRUE) {
-            header("Location:../public/feed.html");
+        if ($stmt->execute(["$this->username", "$this->userEmail", "$this->userPassword", 2]) === TRUE) {
+            
             return TRUE;
         } else {
             return FALSE;
