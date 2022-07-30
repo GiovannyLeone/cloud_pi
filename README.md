@@ -1,13 +1,12 @@
 # cloud PI
 
-*Uma rede social como Projeto integrador, para meu curso técnico no SENAC*
-
+*Uma rede social como Projeto integrador, para meu curso técnico no SENAC* <br />
 Tecnologias utilizadas:
 
 • PHP <br />
-• PDO & MVC
-• JavaScript
-• Jquery
-• Ajax
-• MySql
+• PDO & MVC <br />
+• JavaScript <br />
+• Jquery <br />
+• Ajax <br />
+• MySql <br />
 
