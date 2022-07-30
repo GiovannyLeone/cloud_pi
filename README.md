@@ -4,7 +4,7 @@
 
 Tecnologias utilizadas:
 
-• PHP
+• PHP <br />
 • PDO & MVC
 • JavaScript
 • Jquery
