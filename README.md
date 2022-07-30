@@ -5,14 +5,9 @@
 Tecnologias utilizadas:
 
 • PHP
-
 • PDO & MVC
-
 • JavaScript
-
 • Jquery
-
 • Ajax
-
 • MySql
 
