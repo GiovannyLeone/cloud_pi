@@ -39,43 +39,121 @@ function abreModal() {
 abreModal()
 
 
-$( "#btnSetUsers" ).click(() => {
+$("#btnSetUsers").click((e) => {
+  e.preventDefault()
 
-  let username = $('#setFormUsername').val()
-  let email = $('#setFormEmail').val()
-  let password = $('#setFormPassword').val()
+  //Criando Obj com dados do form
+  let dataForm = {
+    setFormUsername: $('#setFormUsername').val(),
+    setFormEmail: $('#setFormEmail').val(),
+    setFormPassword: $('#setFormPassword').val()
+  }
 
-  console.log(username + " | " + email + " | " + password);
+  // Validando Campos do Form
+  if (dataForm.setFormUsername.length < 2) {
+    $('.msgError').html("Nome de Usuário invalido!").show()
+    return false
+  } else if (dataForm.setFormEmail.length < 6) {
+    $('.msgError').html("Email invalido!").show()
+    return false
+  } else if (dataForm.setFormPassword.length < 2) {
+    $('.msgError').html("Sua Senha deve ter 6 caracteres no minímo!").show()
+    return false
+  }
+  $(".msgError").hide()
+  let url_php = 'http://localhost/cloud_project/mvc/model/cadastrar_user.php'
+
+  // let username = $('#setFormUsername').val()
+  // let email = $('#setFormEmail').val()
+  // let password = $('#setFormPassword').val()
+
+  // console.log(username + " | " + email + " | " + password);
+
   $.ajax({
-    url: "../mvc/model/cadastrar_user.php",
+    url: url_php,
     type: 'POST',
-    data: {
-      setFormUsername: username,
-      setFormEmail: email,
-      setFormPassword: password
-    }
+    data: dataForm,
+    dataType: 'json',
+    async: true
   })
+    // Sucess
+    .done(function ajaxDone(res) {
+      console.log(res);
+      if (res.erro !== undefined) {
+        $(".msgError").html(res.error).show()
+        return false
+      }
+      if (res.redirect !== undefined) {
+        window.location = res.redirect
+      }
 
+    })
+    // falha
+    .fail(function ajaxError(e) {
+      console.log(e);
+
+    })
+    // Sempre
+    .always(function ajaxSempre() {
+      console.log("sempre");
+    })
   return false
 
 })
 
 
-$( "#btnGetUsers" ).click(() => {
+$("#btnGetUsers").click((e) => {
+  e.preventDefault()
 
-  let username = $('#getFormUsername').val()
-  let password = $('#getFormPassword').val()
 
-  console.log(username  + " | " + password);
+  let dataForm = {
+    getFormUsername: $('#getFormUsername').val(),
+    getFormPassword: $('#getFormPassword').val()
+  }
+
+  // Validando Campos do Form
+  if (dataForm.getFormUsername.length < 2) {
+    $('.msgError').html("Nome de Usuário invalido!").show()
+    return false
+  } else if (dataForm.getFormUsername.length < 2) {
+    $('.msgError').html("Sua Senha deve ter 6 caracteres no minímo!").show()
+    return false
+  }
+  $(".msgError").hide()
+  let url_php = 'http://localhost/cloud_project/mvc/model/login_user.php'
+
+  // let getFormUsername = $('#getFormUsername').val()
+  // let getFormPassword = $('#getFormPassword').val()
+
+  // console.log(getFormUsername  + " | " + getFormPassword);
   $.ajax({
-    url: "../mvc/model/login_user.php",
+    url: url_php,
     type: 'POST',
-    data: {
-      getFormUsername: username,
-      getFormPassword: password
-    }
+    data: dataForm,
+    dataType: 'json',
+    async: true
   })
+    // Sucess
+    .done(function ajaxDone(res) {
+      console.log(res);
+      if (res.erro !== undefined) {
+        $(".msgError").html(res.error).show()
+        return false
+      }
+      if (res.redirect !== undefined) {
+        window.location = res.redirect
+      }
 
+    })
+    // falha
+    .fail(function ajaxError(e) {
+      console.log(e);
+
+    })
+    // Sempre
+    .always(function ajaxSempre() {
+      console.log("sempre");
+    })
   return false
 
 })

@@ -31,6 +31,7 @@
               <a id="goLeft" class="off">Entrar</a>
               <button id="btnSetUsers">Cadastre-se</button>
             </form>
+            <p class="msgError" style="display: none;">Erro</p>
           </div>
         </div>
         <div class="right">
@@ -43,6 +44,7 @@
               </div>
               <a id="goRight" class="off">Cadastre-se</a>
               <button id="btnGetUsers" type="submit">Entrar</button>
+              <p class="msgError" style="display: none;">Erro</p>
             </form>
           </div>
         </div>
