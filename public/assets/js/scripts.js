@@ -51,23 +51,18 @@ $("#btnSetUsers").click((e) => {
 
   // Validando Campos do Form
   if (dataForm.setFormUsername.length < 2) {
-    $('.msgError').html("Nome de Usuário invalido!").show()
+    $('.msgError').text("Nome de Usuário invalido!").show()
     return false
   } else if (dataForm.setFormEmail.length < 6) {
-    $('.msgError').html("Email invalido!").show()
+    $('.msgError').text("Email invalido!").show()
     return false
   } else if (dataForm.setFormPassword.length < 2) {
-    $('.msgError').html("Sua Senha deve ter 6 caracteres no minímo!").show()
+    $('.msgError').text("Sua Senha deve ter 6 caracteres no minímo!").show()
     return false
   }
   $(".msgError").hide()
   let url_php = 'http://localhost/cloud_project/mvc/model/cadastrar_user.php'
 
-  // let username = $('#setFormUsername').val()
-  // let email = $('#setFormEmail').val()
-  // let password = $('#setFormPassword').val()
-
-  // console.log(username + " | " + email + " | " + password);
 
   $.ajax({
     url: url_php,
@@ -79,8 +74,8 @@ $("#btnSetUsers").click((e) => {
     // Sucess
     .done(function ajaxDone(res) {
       console.log(res);
-      if (res.erro !== undefined) {
-        $(".msgError").html(res.error).show()
+      if (res.error !== undefined) {
+        $(".msgError").text(res.error).show()
         return false
       }
       if (res.redirect !== undefined) {
@@ -113,19 +108,15 @@ $("#btnGetUsers").click((e) => {
 
   // Validando Campos do Form
   if (dataForm.getFormUsername.length < 2) {
-    $('.msgError').html("Nome de Usuário invalido!").show()
+    $('.msgError').text("Nome de Usuário invalido!").show()
     return false
   } else if (dataForm.getFormUsername.length < 2) {
-    $('.msgError').html("Sua Senha deve ter 6 caracteres no minímo!").show()
+    $('.msgError').text("Sua Senha deve ter 6 caracteres no minímo!").show()
     return false
   }
   $(".msgError").hide()
   let url_php = 'http://localhost/cloud_project/mvc/model/login_user.php'
 
-  // let getFormUsername = $('#getFormUsername').val()
-  // let getFormPassword = $('#getFormPassword').val()
-
-  // console.log(getFormUsername  + " | " + getFormPassword);
   $.ajax({
     url: url_php,
     type: 'POST',
@@ -136,8 +127,8 @@ $("#btnGetUsers").click((e) => {
     // Sucess
     .done(function ajaxDone(res) {
       console.log(res);
-      if (res.erro !== undefined) {
-        $(".msgError").html(res.error).show()
+      if (res.error !== undefined) {
+        $(".msgError").text(res.error).show()
         return false
       }
       if (res.redirect !== undefined) {

@@ -71,52 +71,101 @@ class User
         return $this->idStatus;
     }
 
-    public function setUsers()
+    public function registerUsers()
     {
         require '../db/connect.php';
 
-        $consultQuerySQL = "SELECT username, user_email FROM tb_user WHERE username = ? OR user_email = ?";
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            header("Content-Type: application/json");
+            $resArray = [];
+            $username = strtolower("$this->username");
+            $userEmail = strtolower("$this->userEmail");
         
-        $insertSql = "INSERT INTO tb_user (
-            username, user_email, user_password, hash, id_status
-       )VALUES(
-           ?,?,?,?,?
-       )";
-
+            // Verificando se user existe
+            $consultSql = $conn->prepare("SELECT username FROM tb_user WHERE username = :username OR user_email = :user_email  LIMIT 1");
+            $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
+            $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
+            $consultSql->execute();
         
-        $stmt = $conn->prepare($consultQuerySQL);
-        $stmt->execute(["$this->username", "$this->userEmail"]);
-
-        if ($stmt->execute(["$this->username", "$this->userEmail"]) === FALSE) {
-            return FALSE;
-        } else {
-            $stmt = $conn->prepare($insertSql);
-            $stmt->execute([
-            $this->username,
-            $this->userEmail,
-            $this->userPassword,
-            $this->hash,
-            $this->idStatus,
-        ]);
-        return TRUE;
+            if ($consultSql->rowCount() == 1) {
+                // User já cadastradado
+                $resArray['error'] = "Email ou Nome de Usuário em uso";
+                $resArray['is_login'] = FALSE;
+            } else {
+                // User não existe
+                # Colocar Hash para password
+        
+                $userPassword = "$this->userPassword";
+                #Fazer Cript
+                $hash = "06giovannydev";
+                #Setando Status
+                $idStatus = 2;
+        
+                $newUser = $conn->prepare("INSERT INTO tb_user (username, user_email, user_password, hash, id_status) VALUES(:username, :user_email, :user_password, :hash, :id_status)");
+                $newUser->bindParam(':username', $username, PDO::PARAM_STR);
+                $newUser->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
+                $newUser->bindParam(':user_password', $userPassword, PDO::PARAM_STR);
+                $newUser->bindParam(':hash', $hash, PDO::PARAM_STR);
+                $newUser->bindParam(':id_status', $idStatus, PDO::PARAM_INT);
+                $newUser->execute();
+        
+                // Salvando o último ID do usuário
+                $idUser = $conn->lastInsertId();
+                // Iniciando Sessão
+                $_SESSION['id_user'] = (int) $idUser;
+                // Mandado responda para página de cadastrado, redirecionamento e bool
+                $resArray['redirect'] = 'http://localhost/cloud_project/public/feed.html';
+                $resArray['is_login'] = TRUE;
+            }
+        
+            echo json_encode($resArray);
+        
+        
+        } else{
+            exit("Fora!");
         }
     }
 
-    public function getUsers()
+    public function loginUsers()
+    // Class para logar Users
     {
-        require '../db/connect.php';
+        require('../db/connect.php');
 
-        $consultQuerySQL = "SELECT username, user_email, id_status FROM tb_user WHERE username = ? OR user_email = ? AND user_password = ? AND id_status = ?";
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            header("Content-Type: application/json");
+            $resArray = [];
+            $username = strtolower("$this->username");
+            $userPassword = "$this->userPassword";
         
+            // Verificando se user existe
+            $consultSql = $conn->prepare("SELECT * FROM tb_user WHERE username = :username  LIMIT 1");
+            $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
+            $consultSql->execute();
         
-        $stmt = $conn->prepare($consultQuerySQL);
-        $stmt->execute(["$this->username", "$this->userEmail", "$this->userPassword", 2]);
-
-        if ($stmt->execute(["$this->username", "$this->userEmail", "$this->userPassword", 2]) === TRUE) {
-            
-            return TRUE;
-        } else {
-            return FALSE;
+            if ($consultSql->rowCount() == 1) {
+                // User já cadastradado
+                $existUser = $consultSql->fetch(PDO::FETCH_ASSOC);
+                $idUser = (int) $existUser['id_user'];
+                // Encripty Pass
+                # if her
+                if ($userPassword == $existUser['user_password']) {
+                    $_SESSION["id_user"] = $idUser;
+                    $resArray['redirect'] = 'http://localhost/cloud_project/public/feed.html';
+                } else{
+                    $resArray['error'] = "Os dados não são validos!";
+        
+                }
+                
+            } else {
+                $resArray['error'] = "Conta não encontrada :(";
+        
+            }
+        
+            echo json_encode($resArray);
+        
+        } else{
+            exit("Fora!");
         }
+        
     }
 }
