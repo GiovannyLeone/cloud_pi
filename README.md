@@ -10,3 +10,4 @@ Tecnologias utilizadas:
 • Ajax <br />
 • MySql <br />
 
+Código está puro, sem uso de nenhum framework, futuras atualizações passar o Front-End para o React/Next.js Com TypeScript
