@@ -94,48 +94,31 @@ class User
             } else {
                 // User não existe
                 # Colocar Hash para password
-                // $hash = md5($emailUser . $passUser);
-
-                //          $passUser   = md5($passUser);
-                //          $custo      = '06';
-                //          $salt       = $hash;
-
-                //          // Gera um hash baseado em bcrypt
-                //          $newHash = crypt($passUser, '$2b$' . $custo . '$' . $salt . '$');
-                //          //até aqui
-
-                //         $updateSQL = "UPDATE tb_user SET
-                //         password = '$passUser',
-                //         hash = '$newHash'
-                //         WHERE username = '$loginUser'
-                //         ";
-                //         if ($conn->query($updateSQL) === TRUE) {
-
-                //             return TRUE;
-                //         }else{
-                //             return FALSE;
-                //         }
 
                 $userPassword = "$this->userPassword";
                 // Gerando md5 para encriptar
                 $userPassword = md5($userPassword);
                 $hash = md5($userEmail . $userPassword);
                 $userPassword = $hash;
-                
-
-                // Gera um hash baseado em bcrypt
-                $custoHash = '06';
-                $saltHash = $hash;
-                $newHash = crypt($userPassword, '$2b$' . $custoHash . '$' . $saltHash . '$');
-
-                
 
                 // Gera um Passowrod baseado em bcrypt
                 $custoPassword = '09';
                 $saltPassword = $hash;
                 $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
+                
+                
+
+                // Gera um hash baseado em bcrypt
+                $custoHash = '06';
+                $saltHash = $hash;
+                $newHash = crypt($criptUserPassword, '$2b$' . $custoHash . '$' . $saltHash . '$');
+
                 #Setando Status
                 $idStatus = 2;
+
+                
+
+                
 
                 $newUser = $conn->prepare("INSERT INTO tb_user (username, user_email, user_password, hash, id_status) VALUES(:username, :user_email, :user_password, :hash, :id_status)");
                 $newUser->bindParam(':username', $username, PDO::PARAM_STR);
