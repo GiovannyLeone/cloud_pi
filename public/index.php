@@ -21,7 +21,7 @@
       <div class="topLayer">
         <div class="left">
           <div class="content">
-            <h2>Cadastre-se</h2>
+            <h2 class="alignCenter">Cadastre-se <img src="assets/img/marca-d-agua-cloud_600x.png" alt=""></h2>
             <form method="POST">
               <div class="form-group myGrid">
                 <input type="text" placeholder="Username" name="setFormUsername" id="setFormUsername" />
@@ -36,7 +36,7 @@
         </div>
         <div class="right">
           <div class="content2">
-            <h2>Entrar</h2>
+            <h2 class="alignCenter">Entrar <img src="assets/img/marca-d-agua-cloud-branco@600x.png" alt=""></h2>
             <form method="POST">
               <div class="form-group">
                 <input type="text" placeholder="Username" name="getFormUsername" id="getFormUsername" />

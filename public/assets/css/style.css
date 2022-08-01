@@ -61,7 +61,7 @@ a{
   right: 0;
   width: 50%;
   height: 100%;
-  /* background: #f2eee3 url(../img/cloudbg-black.png); */
+  background: #f2eee3 url(../img/cloudbg-black.png);
   background-size: cover;
   background-position: 50% 50%;
 }
@@ -71,7 +71,7 @@ a{
   left: 0;
   width: 50%;
   height: 100%;
-  /* background: #e74c3c url(../img/cloudbg-white.png); */
+  background: #e74c3c url(../img/cloudbg-white.png);
   background-size: cover;
   background-position: 70% 50%;
 }
@@ -140,6 +140,18 @@ a{
   color: #03A9F4;
   font-weight: 300;
   font-size: 35px;
+}
+
+.alignCenter {
+  display: flex;
+  align-items: center;
+}
+
+.alignCenter img{
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 80px;
 }
 
 

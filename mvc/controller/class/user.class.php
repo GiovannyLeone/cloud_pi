@@ -80,13 +80,13 @@ class User
             $resArray = [];
             $username = strtolower("$this->username");
             $userEmail = strtolower("$this->userEmail");
-        
+
             // Verificando se user existe
             $consultSql = $conn->prepare("SELECT username FROM tb_user WHERE username = :username OR user_email = :user_email  LIMIT 1");
             $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
             $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
             $consultSql->execute();
-        
+
             if ($consultSql->rowCount() == 1) {
                 // User já cadastradado
                 $resArray['error'] = "Email ou Nome de Usuário em uso";
@@ -94,21 +94,57 @@ class User
             } else {
                 // User não existe
                 # Colocar Hash para password
-        
+                // $hash = md5($emailUser . $passUser);
+
+                //          $passUser   = md5($passUser);
+                //          $custo      = '06';
+                //          $salt       = $hash;
+
+                //          // Gera um hash baseado em bcrypt
+                //          $newHash = crypt($passUser, '$2b$' . $custo . '$' . $salt . '$');
+                //          //até aqui
+
+                //         $updateSQL = "UPDATE tb_user SET
+                //         password = '$passUser',
+                //         hash = '$newHash'
+                //         WHERE username = '$loginUser'
+                //         ";
+                //         if ($conn->query($updateSQL) === TRUE) {
+
+                //             return TRUE;
+                //         }else{
+                //             return FALSE;
+                //         }
+
                 $userPassword = "$this->userPassword";
-                #Fazer Cript
-                $hash = "06giovannydev";
+                // Gerando md5 para encriptar
+                $userPassword = md5($userPassword);
+                $hash = md5($userEmail . $userPassword);
+                $userPassword = $hash;
+                
+
+                // Gera um hash baseado em bcrypt
+                $custoHash = '06';
+                $saltHash = $hash;
+                $newHash = crypt($userPassword, '$2b$' . $custoHash . '$' . $saltHash . '$');
+
+                
+
+                // Gera um Passowrod baseado em bcrypt
+                $custoPassword = '09';
+                $saltPassword = $hash;
+                $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
                 #Setando Status
                 $idStatus = 2;
-        
+
                 $newUser = $conn->prepare("INSERT INTO tb_user (username, user_email, user_password, hash, id_status) VALUES(:username, :user_email, :user_password, :hash, :id_status)");
                 $newUser->bindParam(':username', $username, PDO::PARAM_STR);
                 $newUser->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
-                $newUser->bindParam(':user_password', $userPassword, PDO::PARAM_STR);
-                $newUser->bindParam(':hash', $hash, PDO::PARAM_STR);
+                $newUser->bindParam(':user_password', $criptUserPassword, PDO::PARAM_STR);
+                $newUser->bindParam(':hash', $newHash, PDO::PARAM_STR);
                 $newUser->bindParam(':id_status', $idStatus, PDO::PARAM_INT);
                 $newUser->execute();
-        
+
                 // Salvando o último ID do usuário
                 $idUser = $conn->lastInsertId();
                 // Iniciando Sessão
@@ -117,11 +153,9 @@ class User
                 $resArray['redirect'] = 'http://localhost/cloud_project/public/feed.html';
                 $resArray['is_login'] = TRUE;
             }
-        
+
             echo json_encode($resArray);
-        
-        
-        } else{
+        } else {
             exit("Fora!");
         }
     }
@@ -135,37 +169,61 @@ class User
             header("Content-Type: application/json");
             $resArray = [];
             $username = strtolower("$this->username");
+            $userEmail = strtolower("$this->userEmail");
             $userPassword = "$this->userPassword";
-        
+            $userPassword = md5($userPassword);
+
+
+
+
             // Verificando se user existe
-            $consultSql = $conn->prepare("SELECT * FROM tb_user WHERE username = :username  LIMIT 1");
+            $consultSql = $conn->prepare("SELECT * FROM tb_user WHERE username = :username OR user_email = :user_email LIMIT 1");
             $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
+            $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
             $consultSql->execute();
-        
+
             if ($consultSql->rowCount() == 1) {
                 // User já cadastradado
                 $existUser = $consultSql->fetch(PDO::FETCH_ASSOC);
                 $idUser = (int) $existUser['id_user'];
+                $userEmail = (string) $existUser['user_email'];
+
+
+                // Var de sessão
+                $loginUserDB = (string) $existUser['username'];
+                $loginPassword = (string) $existUser['user_password'];
+
+                $hash = md5($userEmail . $userPassword);
+                $userPassword = $hash;
+
+                // Gera um Passowrod baseado em bcrypt para logar
+                $custoPassword = '09';
+                $saltPassword = $hash;
+                $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
+
                 // Encripty Pass
                 # if her
-                if ($userPassword == $existUser['user_password']) {
+                if ($criptUserPassword == $existUser['user_password']) {
                     $_SESSION["id_user"] = $idUser;
+                    setcookie("loginUser", $loginUserDB);
+                    setcookie("loginPassword", $loginPassword);
+
+                    session_start();
+
+                    $_SESSION['loginUserSe'] = $loginUserDB;
+                    $_SESSION['loginPasswordSe'] = $loginPassword;
+
                     $resArray['redirect'] = 'http://localhost/cloud_project/public/feed.html';
-                } else{
+                } else {
                     $resArray['error'] = "Os dados não são validos!";
-        
                 }
-                
             } else {
                 $resArray['error'] = "Conta não encontrada :(";
-        
             }
-        
+
             echo json_encode($resArray);
-        
-        } else{
+        } else {
             exit("Fora!");
         }
-        
     }
 }
