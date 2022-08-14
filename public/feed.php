@@ -7,7 +7,7 @@
 <body>
 
     <!-- Modal structure -->
-    <?php include_once("assets/includes/modal.inc.php") ?>
+    <?php include_once("assets/includes/modal.inc/modal.inc.php") ?>
 
 
     <!-- Trigger to open Modal -->

@@ -23,7 +23,13 @@ $(document).on('click', '.trigger', function(event) {
 });
 
 
-$("#modalCreatePost").iziModal();
+$("#modalCreatePost").iziModal({
+    width: 1100,
+    radius: 5,
+    padding: 20,
+    group: 'products',
+    loop: true
+});
 
 // modalSharePosts
 
