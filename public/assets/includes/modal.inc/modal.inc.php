@@ -25,35 +25,56 @@
                 <a href="#" data-izimodal-open="#modalSharePost" data-izimodal-zindex="20000" data-izimodal-preventclose="">| Add Modal (A)</a>
             </div>
                 <!-- You can also use: data-iziModal-transitionOut="fadeOutDown" without data-iziModal-preventClose -->
-            <div class="logoChat">
-                <img src="assets/img/marca-d-agua-cloud_600x.png" alt="logo">
-                <h2>Chat</h2>
-            </div>
-            <div class="receiverChat">
-                <img src="assets/img/img-profile.png" alt="">
-                <h2>Gustavo Leone</h2>
-            </div>
-            <div class="chatBox">
-                <div class="chatResponse">
-                    <div class="chatInfoProfile">
-                    <h2>Gustavo Leone</h2>
-                    <img src="assets/img/img-profile.png" alt="">
+            <div class="myFlex">
+                <div class="statusChat">
+                        <div class="profileChat">
+                            <img src="assets/img/img-profile.png" alt="">
+                            <h2>Giovanny Leone</h2>
+                        </div>
+                        <div class="statusProfileChat">
+                            <div class="bioChat">
+                            "That a simple Biography"
+                            </div>
+                            <div class="yourStatusChat">
+                                <div class="setChat">
+                                    <h3>What you fell?</h3>
+                                    <img src="assets/img/medal-gold.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div>
+                <div class="logoChat">
+                        <img src="assets/img/marca-d-agua-cloud_600x.png" alt="logo">
+                        <h2>Chat</h2>
+                </div class="chatPart">
+                    <div class="receiverChat">
+                        <img src="assets/img/img-profile.png" alt="">
+                        <h2>Gustavo Leone</h2>
                     </div>
-                    <p class="receiverResponse">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit reprehenderit atque unde perferendis,</p>
-                </div>
+                    <div class="chatBox">
+                        <div class="chatResponse">
+                            <div class="chatInfoProfile">
+                            <h2>Gustavo Leone</h2>
+                            <img src="assets/img/img-profile.png" alt="">
+                            </div>
+                            <p class="receiverResponse">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit reprehenderit atque unde perferendis,</p>
+                            <p class="receiverResponse">AAAAAAAAAAAAAAALorem ipsum, dolor sit amet consectetur adipisicing elit. Odit reprehenderit atque unde perferendis,</p>
+                        </div>
 
-                <div class="chatYourMessage">
+                        <div class="chatYourMessage">
+                                <p class="yourMessage">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit reprehenderit atque unde perferendis,</p>
+                                <p class="yourMessage">AAAAAAAAAAAAAALorem ipsum, dolor sit amet consectetur adipisicing elit. Odit reprehenderit atque unde perferendis,</p>
+                        </div>
 
-                        <p class="yourMessage">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit reprehenderit atque unde perferendis,</p>
-
-                </div>
-
-            </div>
-            <div class="typingChat">
-                <textarea  type="textarea" id="yourTyping" name="yourTyping" placeholder="Typing Something" ></textarea>
-                <div id="btnChat">
-                    <button style="background-color: #0D0D0D;">C</button>
-                    <button style="background-color: #0D0D0D;">S</button>
+                    </div>
+                    <div class="typingChat">
+                        <textarea  type="textarea" id="yourTyping" name="yourTyping" placeholder="Typing Something" ></textarea>
+                        <div id="btnChat">
+                            <button style="background-color: #0D0D0D;">C</button>
+                            <button style="background-color: #0D0D0D;">S</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
