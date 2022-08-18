@@ -99,13 +99,13 @@
         <!-- Third col -->
         <div id="menu">
             <div id="menu-navegation">
-                <a href="feed.html">
+                <a href="feed">
                     <h3>Home <span class="circo-exemple1"></span></h3>
                 </a>
-                <a href="profile.html">
+                <a href="profile">
                     <h3>Profile <span class="circo-exemple1"></span></h3>
                 </a>
-                <a href="settings.html">
+                <a href="settings">
                     <h3>Settings <span class="circo-exemple1"></span></h3>
                 </a>
             </div>

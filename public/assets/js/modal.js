@@ -24,7 +24,7 @@ $(document).on('click', '.trigger', function(event) {
 
 
 $("#modalCreatePost").iziModal({
-    width: 1100,
+    width: 1200,
     radius: 5,
     padding: 20,
     group: 'products',
