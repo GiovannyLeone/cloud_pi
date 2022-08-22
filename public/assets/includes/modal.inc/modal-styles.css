@@ -227,3 +227,35 @@
     width: 50px;
     border-radius: 100%;
 }
+
+
+/* Recovery Pass
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*/
+
+.recovery-pass-form{
+    width: 100%;
+    margin-left: 10rem;
+}
+
+@media screen and (max-width: 768px) {
+    .recovery-pass-form{
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+.recovery-pass-email, .recover-pass-user{
+    padding: 5px;
+
+}

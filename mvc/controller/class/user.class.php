@@ -78,7 +78,7 @@ class User
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
             $resArray = [];
-            $username = strtolower("$this->username");
+            $username = "$this->username";
             $userEmail = strtolower("$this->userEmail");
 
             // Verificando se user existe
@@ -151,7 +151,7 @@ class User
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
             $resArray = [];
-            $username = strtolower("$this->username");
+            $username = "$this->username";
             $userEmail = strtolower("$this->userEmail");
             $userPassword = "$this->userPassword";
             $userPassword = md5($userPassword);
@@ -209,4 +209,40 @@ class User
             exit("Fora!");
         }
     }
+    public function recoveryPassUser()
+    {
+        require('../db/connect.php');
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            header("Content-Type: application/json");
+            $resArray = [];
+            $username = "$this->username";
+            $userEmail = strtolower("$this->userEmail");
+
+            // Verificando se User Existe
+            $consultSql = $conn->prepare("SELECT * FROM tb_user WHERE username = :username AND user_email = :user_email AND id_status = 2 LIMIT");
+            $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
+            $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
+            $consultSql->execute();
+
+            if ($consultSql->rowCount() == 1) {
+                // User Existe
+
+                $existUser = $consultSql->fetch(PDO::FETCH_ASSOC);
+                $hash = (string) $$existUser['hash']; //Pegando a hash da consulta do DB
+
+                $urlRecovery = $baseURL . "/recovery-password?idRec=" . $hash;
+
+                echo $urlRecovery;
+
+                $resArray['redirect'] = 'http://localhost/cloud_pi/mvc/view/recovery-pass.php';
+            }
+            echo json_encode($resArray);
+        } else {
+            exit("Fora!");
+        }
+
+        
+    }
+
 }

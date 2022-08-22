@@ -102,3 +102,35 @@
         <!-- data-iziModal-fullscreen="true"  data-iziModal-title="Welcome"  data-iziModal-subtitle="Subtitle"  data-iziModal-icon="icon-home" -->
         <!-- Modal content -->
     </div>
+
+
+    <!-- Modal recovery Pass  -->
+
+    <div id="modalRecoveryPass">
+        <div style="height: 90vh;">
+            <a href="#" data-izimodal-open="#modal" data-izimodal-transitionin="fadeInDown">X CLOSE MODAL |||||||</a>
+            <!--  The attr 'data-iziModal-preventClose' will allow the already open modal is not closed.-->
+
+            <a href="#" data-izimodal-open="#another-modal" data-izimodal-zindex="20000" data-izimodal-preventclose="">Another Modal</a>
+
+            <!-- You can also use: data-iziModal-transitionOut="fadeOutDown" without data-iziModal-preventClose -->
+
+            <div>
+                <form action="#" method="POST" class="recovery-pass-form">
+                    <h2>Recuperar Senha</h2>
+
+                    <input class="recovery-pass-email" type="email" name="forgetEmail" placeholder="Digite seu Email">
+                    <br>
+                    <input class="recovery-pass-user" type="text" name="forgetUsername" placeholder="Digite seu usuário">
+                    <br>
+                    <br>
+                    <button>Recuperar Senha</button>
+                    <p class="msgRecoveryError" style="display: none;"></p>
+                </form>
+            </div>
+
+
+        </div>
+        <!-- data-iziModal-fullscreen="true"  data-iziModal-title="Welcome"  data-iziModal-subtitle="Subtitle"  data-iziModal-icon="icon-home" -->
+        <!-- Modal content -->
+    </div>

@@ -61,7 +61,7 @@ $("#btnSetUsers").click((e) => {
     return false
   }
   $(".msgError").hide()
-  let url_php = 'http://localhost/cloud_project/mvc/model/cadastrar_user.php'
+  let url_php = 'http://localhost/cloud_pi/mvc/model/cadastrar_user.php'
 
 
   $.ajax({
@@ -115,12 +115,64 @@ $("#btnGetUsers").click((e) => {
     return false
   }
   $(".msgError").hide()
-  let url_php = 'http://localhost/cloud_project/mvc/model/login_user.php'
+  let url_php = 'http://localhost/cloud_pi/mvc/model/login_user.php'
 
   $.ajax({
     url: url_php,
     type: 'POST',
     data: dataForm,
+    dataType: 'json',
+    async: true
+  })
+    // Sucess
+    .done(function ajaxDone(res) {
+      console.log(res);
+      if (res.error !== undefined) {
+        $(".msgError").text(res.error).show()
+        return false
+      }
+      if (res.redirect !== undefined) {
+        window.location = res.redirect
+      }
+
+    })
+    // falha
+    .fail(function ajaxError(e) {
+      console.log(e);
+
+    })
+    // Sempre
+    .always(function ajaxSempre() {
+      console.log("sempre");
+    })
+  return false
+
+})
+
+$("#forgetPass").click((e) => {
+  e.preventDefault()
+
+
+  let dataFogetForm = {
+    getForgetFormUsername: $('#forgetEmail').val(),
+    getForgetFormPassword: $('#forgetUsername').val()
+  }
+
+  // Validando Campos do Form
+  // if (dataFogetForm.getForgetFormUsername.length < 2) {
+  //   $('.msgRecoveryError').text("Email muito curto!").show()
+  //   return false
+  // } else if (dataFogetForm.getFormUsername.length < 2) {
+  //   $('.msgRecoveryError').text("Nome de usuário muito curto").show()
+  //   return false
+  // }
+  $(".msgRecoveryError").hide()
+  let url_php = 'http://localhost/cloud_pi/mvc/model/recovery-pass-user.php'
+
+  $.ajax({
+    url: url_php,
+    type: 'POST',
+    data: dataFogetForm,
     dataType: 'json',
     async: true
   })

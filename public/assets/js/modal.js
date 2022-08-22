@@ -42,3 +42,18 @@ $(document).on('click', '.trigger', function(event) {
 
 
 $("#modalSharePost").iziModal();
+
+
+// Modal for recovery Password
+
+$(document).on('click', '.trigger', function(event) {
+    event.preventDefault();
+    // $('#modal').iziModal('setZindex', 99999);
+    // $('#modal').iziModal('open', { zindex: 99999 });
+    $('#modalRecoveryPass').iziModal('open');
+});
+
+$("#modalRecoveryPass").iziModal({
+    radius: 5,
+    padding: 20,
+});
