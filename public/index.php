@@ -40,7 +40,7 @@
               </div>
               <a id="goRight" class="off">Cadastre-se</a>
               <button id="btnGetUsers" type="submit">Entrar</button>
-              <a href="recovery-user-pass">Esqueci a senha</a>
+              <a data-izimodal-open="#modalRecoveryPass" data-izimodal-transitionin="fadeInDown">Esqueci a senha</a>
               <p class="msgError" style="display: none;">Erro</p>
             </form>
           </div>

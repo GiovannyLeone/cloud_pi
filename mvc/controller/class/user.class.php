@@ -133,7 +133,7 @@ class User
                 // Iniciando Sessão
                 $_SESSION['id_user'] = (int) $idUser;
                 // Mandado responda para página de cadastrado, redirecionamento e bool
-                $resArray['redirect'] = 'http://localhost/cloud_project/public/feed.html';
+                $resArray['redirect'] = 'http://localhost/cloud_project/public/feed';
                 $resArray['is_login'] = TRUE;
             }
 
@@ -196,7 +196,7 @@ class User
                     $_SESSION['loginUserSe'] = $loginUserDB;
                     $_SESSION['loginPasswordSe'] = $loginPassword;
 
-                    $resArray['redirect'] = 'http://localhost/cloud_project/public/feed.html';
+                    $resArray['redirect'] = 'http://localhost/cloud_project/public/feed';
                 } else {
                     $resArray['error'] = "Os dados não são validos!";
                 }
@@ -209,7 +209,7 @@ class User
             exit("Fora!");
         }
     }
-    public function recoveryPassUser()
+    public function VerifyRecoveryPassUser()
     {
         require('../db/connect.php');
 
@@ -218,23 +218,30 @@ class User
             $resArray = [];
             $username = "$this->username";
             $userEmail = strtolower("$this->userEmail");
+            $idStatus = 2;
 
             // Verificando se User Existe
-            $consultSql = $conn->prepare("SELECT * FROM tb_user WHERE username = :username AND user_email = :user_email AND id_status = 2 LIMIT");
+            $consultSql = $conn->prepare("SELECT username, user_email, hash, id_status FROM tb_user WHERE username = :username AND user_email = :user_email AND id_status = :id_status LIMIT 1");
             $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
             $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
+            $consultSql->bindParam(':id_status', $idStatus, PDO::PARAM_INT);
             $consultSql->execute();
 
-            if ($consultSql->rowCount() == 1) {
+
+            if ($consultSql->rowCount() > 0) {
                 // User Existe
 
+                $baseURL = "http://";
+                $baseURL .= "localhost/cloud_pi";
+
                 $existUser = $consultSql->fetch(PDO::FETCH_ASSOC);
-                $hash = (string) $$existUser['hash']; //Pegando a hash da consulta do DB
+                $hash = (string) $existUser['hash']; //Pegando a hash da consulta do DB
 
                 $urlRecovery = $baseURL . "/recovery-password?idRec=" . $hash;
 
-                echo $urlRecovery;
-
+                $resArray['username'] = $username;
+                $resArray['userEmail'] = $userEmail;
+                $resArray['urlHash'] = $urlRecovery;
                 $resArray['redirect'] = 'http://localhost/cloud_pi/mvc/view/recovery-pass.php';
             }
             echo json_encode($resArray);

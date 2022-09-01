@@ -22,6 +22,7 @@
                     <button id="forgetPass">Recuperar Senha</button>
                     <p class="msgRecoveryError" style="display: none;"></p>
                 </form>
+            </div>
 </div>
     
 
