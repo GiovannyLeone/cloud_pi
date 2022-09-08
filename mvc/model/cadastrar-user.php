@@ -1,5 +1,5 @@
 <?php
-include_once('../controller/class/user.class.php');
+include_once('../controller/class/class.user.php');
 
 $username = $_POST['setFormUsername'];
 $userEmail = $_POST['setFormEmail'];

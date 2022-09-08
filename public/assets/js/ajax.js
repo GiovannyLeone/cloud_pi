@@ -20,7 +20,7 @@ $("#btnSetUsers").click((e) => {
         return false
     }
     $(".msgError").hide()
-    let url_php = 'http://localhost/cloud_pi/mvc/model/cadastrar_user.php'
+    let url_php = 'http://localhost/cloud_pi/mvc/model/cadastrar-user.php'
 
 
     $.ajax({
@@ -74,7 +74,7 @@ $("#btnGetUsers").click((e) => {
         return false
     }
     $(".msgError").hide()
-    let url_php = 'http://localhost/cloud_pi/mvc/model/login_user.php'
+    let url_php = 'http://localhost/cloud_pi/mvc/model/login-user.php'
 
     $.ajax({
             url: url_php,

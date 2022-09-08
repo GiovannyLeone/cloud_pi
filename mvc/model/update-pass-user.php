@@ -1,5 +1,5 @@
 <?php
-include_once('../controller/class/user.class.php');
+include_once('../controller/class/class.user.php');
 
 
 // $baseURL = 'http://' . $_SERVER['SERVER_NAME'];
