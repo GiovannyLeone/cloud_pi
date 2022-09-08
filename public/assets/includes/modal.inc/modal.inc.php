@@ -118,8 +118,9 @@
 
             <div>
                 <form method="POST" class="recovery-pass-form">
+                    <div style="background-color: #FFF; width:100%; text-align:center; padding: 20px 0;">
                     <h2>Recuperar Senha</h2>
-
+                    
                     <input class="recovery-pass-email" type="email" name="forgetEmail" id="forgetEmail" placeholder="Digite seu Email">
                     <br>
                     <input class="recovery-pass-user" type="text" name="forgetUsername" id="forgetUsername" placeholder="Digite seu usuário">
@@ -127,6 +128,7 @@
                     <br>
                     <button id="forgetPass">Recuperar Senha</button>
                     <p class="msgRecoveryError" style="display: none;"></p>
+                    </div>
 
 
                 </form>

@@ -11,4 +11,4 @@ $username = $_POST["getForgetFormUsername"];
 $users = new User;
 $users->setUserEmail($userEmail);
 $users->setUsername($username);
-$users->VerifyRecoveryPassUser();
+$users->verifyRecoveryPassUser();

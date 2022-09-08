@@ -78,8 +78,8 @@ class User
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
             $resArray = [];
-            $username = "$this->username";
-            $userEmail = strtolower("$this->userEmail");
+            $username = $this->username;
+            $userEmail = strtolower($this->userEmail);
 
             // Verificando se user existe
             $consultSql = $conn->prepare("SELECT username FROM tb_user WHERE username = :username OR user_email = :user_email  LIMIT 1");
@@ -133,7 +133,7 @@ class User
                 // Iniciando Sessão
                 $_SESSION['id_user'] = (int) $idUser;
                 // Mandado responda para página de cadastrado, redirecionamento e bool
-                $resArray['redirect'] = 'http://localhost/cloud_project/public/feed';
+                $resArray['redirect'] = 'http://localhost/cloud_pi/public/feed';
                 $resArray['is_login'] = TRUE;
             }
 
@@ -151,9 +151,9 @@ class User
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
             $resArray = [];
-            $username = "$this->username";
-            $userEmail = strtolower("$this->userEmail");
-            $userPassword = "$this->userPassword";
+            $username = $this->username;
+            $userEmail = strtolower($this->userEmail);
+            $userPassword = $this->userPassword;
             $userPassword = md5($userPassword);
 
 
@@ -196,7 +196,7 @@ class User
                     $_SESSION['loginUserSe'] = $loginUserDB;
                     $_SESSION['loginPasswordSe'] = $loginPassword;
 
-                    $resArray['redirect'] = 'http://localhost/cloud_project/public/feed';
+                    $resArray['redirect'] = 'http://localhost/cloud_pi/public/feed';
                 } else {
                     $resArray['error'] = "Os dados não são validos!";
                 }
@@ -209,15 +209,15 @@ class User
             exit("Fora!");
         }
     }
-    public function VerifyRecoveryPassUser()
+    public function verifyRecoveryPassUser()
     {
         require('../db/connect.php');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
             $resArray = [];
-            $username = "$this->username";
-            $userEmail = strtolower("$this->userEmail");
+            $username = $this->username;
+            $userEmail = strtolower($this->userEmail);
             $idStatus = 2;
 
             // Verificando se User Existe
@@ -228,7 +228,7 @@ class User
             $consultSql->execute();
 
 
-            if ($consultSql->rowCount() > 0) {
+            if ($consultSql->rowCount() == 1) {
                 // User Existe
 
                 $baseURL = "http://";
@@ -242,14 +242,98 @@ class User
                 $resArray['username'] = $username;
                 $resArray['userEmail'] = $userEmail;
                 $resArray['urlHash'] = $urlRecovery;
-                $resArray['redirect'] = 'http://localhost/cloud_pi/mvc/view/recovery-pass.php';
+                $resArray['redirect'] = 'http://localhost/cloud_pi/mvc/view/recovery-pass';
+                $resArray['date'] = date('d/m/Y');
+                $resArray['time'] = date('H:i');
+            } else {
+                $resArray['error'] = (string) "Conta não encontrada :(";
             }
             echo json_encode($resArray);
         } else {
             exit("Fora!");
-        }
+        }      
+    }
 
-        
+    public function updatePasswordUser()
+    {
+        require('../db/connect.php');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            header("Content-Type: application/json");
+            $resArray = [];
+            $username = $this->username;
+            $userEmail = strtolower($this->userEmail);
+            $userPassword = $this->userPassword;
+            $userHash = $this->hash;
+            $idStatus = (int) 2;
+
+            // Verificando se User Existe
+            $consultSql = $conn->prepare("SELECT username, user_email, hash, id_status FROM tb_user WHERE username = :username AND user_email = :user_email AND hash = :hash AND id_status = :id_status LIMIT 1");
+            $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
+            $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
+            $consultSql->bindParam(':hash', $userHash, PDO::PARAM_STR);
+            $consultSql->bindParam(':id_status', $idStatus, PDO::PARAM_INT);
+            $consultSql->execute();
+
+
+            if ($consultSql->rowCount() == 1) {
+                // User Existe
+
+                $baseURL = "http://";
+                $baseURL .= "localhost/cloud_pi";
+
+                $existUser = $consultSql->fetch(PDO::FETCH_ASSOC);
+                $UsernameSession = (string) $existUser['username'];
+                $userEmailSession = (string) $existUser['user_email'];
+
+                $userPassword = $this->userPassword;
+                $userEmail = strtolower($this->userEmail);
+
+
+
+                // echo $UsernameSession;
+                // echo "<hr>";
+                // echo $username;
+                // echo "<hr>";
+                // echo $userEmailSession;
+                // echo "<hr>";
+                // echo $userEmail;
+                // echo "<hr>";
+
+
+
+                $userPassword = md5($userPassword);
+                $hash = md5($userEmail . $userPassword);
+                $userPassword = $hash;
+
+                // Gera um Passowrod baseado em bcrypt
+                $custoPassword = '09';
+                $saltPassword = $hash;
+                $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
+
+            
+
+                // Gera um hash baseado em bcrypt
+                $custoHash = '06';
+                $saltHash = $hash;
+                $newHash = crypt($criptUserPassword, '$2b$' . $custoHash . '$' . $saltHash . '$');               
+
+                $updatePasswordUser = $conn->prepare("UPDATE tb_user SET
+                user_password = :criptUserPassword,
+                hash = :newHash
+                WHERE username = :username AND user_email = :user_email");
+                $updatePasswordUser->bindParam(':username', $username, PDO::PARAM_STR);
+                $updatePasswordUser->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
+                $updatePasswordUser->bindParam(':criptUserPassword', $criptUserPassword, PDO::PARAM_STR);
+                $updatePasswordUser->bindParam(':newHash', $newHash, PDO::PARAM_STR);
+                $updatePasswordUser->execute();
+
+                $resArray['redirect'] = 'http://localhost/cloud_pi/public/';
+            }
+            echo json_encode($resArray);
+        } else {
+
+        }
+           
     }
 
 }

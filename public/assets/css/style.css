@@ -210,25 +210,6 @@ input {
     margin-top: 20px;
 }
 
-#forgetPass{
-    padding: 10px 0;
-    margin: 0 auto;
-    transition: .3s ease-in-out;
-    width: 60%;
-    position: relative;
-    right: 10px;
-    text-align: center;
-
-}
-
-#forgetPass:hover{
-    content: "";
-    background-color: #03A9F4;
-    width: 100%;
-    color: #FFF;
-    cursor: pointer;
-}
-
 @media screen and (max-width: 768px) {
     .topLayer {
         left: 0;
