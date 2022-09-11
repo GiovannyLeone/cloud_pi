@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 
-<?php include_once("assets/includes/head.inc.php") ?>
+<?php include_once("assets/includes/inc.head-footer/head.inc.php") ?>
 
 <body>
 
@@ -22,6 +22,6 @@
 </body>
 <!-- Modal structure -->
 <?php include_once("assets/includes/inc.modal/inc.modal.php") ?>
-<?php include_once("assets/includes/footer.inc.php") ?>
+<?php include_once("assets/includes/inc.head-footer/footer.inc.php") ?>
 
 </html>

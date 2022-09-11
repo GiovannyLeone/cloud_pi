@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
-<?php include_once("assets/includes/head.inc.php") ?>
+<?php include_once("assets/includes/inc.head-footer/head.inc.php") ?>
 <body>
   <main id="content">
     <!-- Settings -->
@@ -18,6 +18,6 @@
 </body>
 <!-- Modal structure -->
 <?php include_once("assets/includes/inc.modal/inc.modal.php") ?>
-<?php include_once("assets/includes/footer.inc.php") ?>
+<?php include_once("assets/includes/inc.head-footer/footer.inc.php") ?>
 
 </html>
