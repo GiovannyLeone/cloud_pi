@@ -4,9 +4,6 @@
 <?php include_once("assets/includes/head.inc.php") ?>
 
 <body>
-
-
-
   <div id="form-login-sign-up">
     <div id="back">
       <div class="backRight"></div>
@@ -48,14 +45,10 @@
       </div>
     </div>
   </div>
-  <!-- Modal structure -->
-  <?php include_once("assets/includes/modal.inc/modal.inc.php") ?>
-
-
-  <!-- Trigger to open Modal -->
-  <?php include_once("assets/includes/footer.inc.php") ?>
-  
 </body>
+<!-- Modal structure -->
+<?php include_once("assets/includes/modal.inc/modal.inc.php") ?>
+<?php include_once("assets/includes/footer.inc.php") ?>
 
 
 </html>

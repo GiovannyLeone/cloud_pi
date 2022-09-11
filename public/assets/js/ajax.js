@@ -20,7 +20,7 @@ $("#btnSetUsers").click((e) => {
         return false
     }
     $(".msgError").hide()
-    let url_php = 'http://localhost/cloud_pi/mvc/model/cadastrar-user.php'
+    let url_php = 'http://localhost/cloud_pi/mvc/model/user-register.php'
 
 
     $.ajax({
@@ -66,15 +66,20 @@ $("#btnGetUsers").click((e) => {
     }
 
     // Validando Campos do Form
-    if (dataForm.getFormUsername.length < 2) {
-        $('.msgError').text("Nome de Usuário invalido!").show()
-        return false
-    } else if (dataForm.getFormUsername.length < 2) {
-        $('.msgError').text("Sua Senha deve ter 6 caracteres no minímo!").show()
+    if (dataForm.getFormUsername.length < 2 && dataForm.getFormUsername.length < 2) {
+        $('.msgError').text("Nome de Usuário ou senha invalidos!").show()
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...😥',
+            text: 'Nome de Usuário ou senha invalidos!',
+            confirmButtonColor: '#767be4',
+            confirmButtonText: 'Tentar novamente',
+            footer: '<a href="">Por que precisamos dessas informações?</a>'
+        })
         return false
     }
     $(".msgError").hide()
-    let url_php = 'http://localhost/cloud_pi/mvc/model/login-user.php'
+    let url_php = 'http://localhost/cloud_pi/mvc/model/user-login.php'
 
     $.ajax({
             url: url_php,
@@ -87,7 +92,16 @@ $("#btnGetUsers").click((e) => {
         .done(function ajaxDone(res) {
             console.log(res);
             if (res.error !== undefined) {
+                $('.msgError').text("Nome de Usuário ou senha invalidos!").show()
                 $(".msgError").text(res.error).show()
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...😥',
+                    text: 'Nome de Usuário ou senha invalidos!',
+                    confirmButtonColor: '#767be4',
+                    confirmButtonText: 'Tentar novamente',
+                    footer: '<a href="">Por que precisamos dessas informações?</a>'
+                })
                 return false
             }
             if (res.redirect !== undefined) {
@@ -132,7 +146,7 @@ $("#forgetPass").click((e) => {
         return false
     }
     $(".msgRecoveryError").hide()
-    let url_php = 'http://localhost/cloud_pi/mvc/model/verify-recovery-pass-user.php'
+    let url_php = 'http://localhost/cloud_pi/mvc/model/user-verify-recovery-pass.php'
 
 
     $.ajax({
@@ -147,6 +161,7 @@ $("#forgetPass").click((e) => {
             console.log(res);
             if (res.error !== undefined) {
                 $(".msgError").text(res.error).show()
+                $('.msgRecoveryError').text("Email ou nome de usuario Invalido").show()
                 $('.msgRecoveryError').text("Email ou nome de usuario Invalido").show()
                 Swal.fire({
                     icon: 'error',
@@ -206,73 +221,111 @@ $("#updatePass").click((e) => {
     }
 
     // Validando Campos do Form
-    if (dataUpdateForm.updateEmailUser.length < 2 || dataUpdateForm.updateLoginUser.length < 2) {
-        $('.msgRecoveryError').text("Email ou nome de usuario Invalido").show()
+    if (dataUpdateForm.updateEmailUser.length < 2 || dataUpdateForm.updateLoginUser.length < 2 ||
+        dataUpdateForm.updatePassUser.length <= 5 || dataUpdateForm.updatePassUserConf.length <= 5) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...😥',
-            text: 'Email ou nome de usuario Invalido!',
+            text: 'Credenciais invalidas ou senha muito curtaaa!',
             footer: '<a href="">Por que precisamos dessas informações?</a>'
         })
+    } else if (dataUpdateForm.updatePassUser !== dataUpdateForm.updatePassUserConf) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...😥',
+            text: 'Credenciais invalidas ou senha muito curta!',
+            footer: '<a href="">Por que precisamos dessas informações?</a>'
+        })
+    } else {
+
+        $(".msgRecoveryError").hide()
+        let url_php = 'http://localhost/cloud_pi/mvc/model/user-update-pass.php'
+
+
+        $.ajax({
+                url: url_php,
+                type: 'POST',
+                data: dataUpdateForm,
+                dataType: 'json',
+                async: true
+            })
+            // Success
+            .done(function ajaxDone(res) {
+                console.log(res);
+                if (res.error !== undefined) {
+                    $(".msgError").text(res.error).show()
+                    return false
+                }
+                if (res.redirect !== undefined) {
+                    Swal.fire({
+                        title: 'Senha alterada! 😁',
+                        html: 'Sua senha foi redefinida com sucesso! <br> Redirecionamento em: <b></b> ',
+                        icon: 'success',
+                        timer: 5000,
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval(() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
+                        }
+                    }).then((result) => {
+                        /* Read more about handling dismissals below */
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            console.log('I was closed by the timer')
+                        }
+                    })
+                    setTimeout(() => {
+                        window.location.href = res.redirect
+                    }, "5000")
+
+                }
+
+            })
+            // falha
+            .fail(function ajaxError(e) {
+                console.log(e);
+
+            })
+            // Sempre
+            .always(function ajaxSempre() {
+                console.log("sempre");
+            })
+
         return false
     }
-    $(".msgRecoveryError").hide()
-    let url_php = 'http://localhost/cloud_pi/mvc/model/update-pass-user.php'
+})
+
+// Ajax Profile
+
+$("#teste").click((e) => {
+    e.preventDefault()
+
+    let url_php = 'http://localhost/cloud_pi/mvc/model/profile-login.php'
 
 
     $.ajax({
-            url: url_php,
-            type: 'POST',
-            data: dataUpdateForm,
-            dataType: 'json',
-            async: true
-        })
-        // Success
-        .done(function ajaxDone(res) {
-            console.log(res);
-            if (res.error !== undefined) {
-                $(".msgError").text(res.error).show()
-                return false
-            }
-            if (res.redirect !== undefined) {
-                Swal.fire({
-                    title: 'Senha alterada! 😁',
-                    html: 'Sua senha foi redefinida com sucesso! <br> Redirecionamento em: <b></b> ',
-                    icon: 'success',
-                    timer: 5000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                      Swal.showLoading()
-                      const b = Swal.getHtmlContainer().querySelector('b')
-                      timerInterval = setInterval(() => {
-                        b.textContent = Swal.getTimerLeft()
-                      }, 100)
-                    },
-                    willClose: () => {
-                      clearInterval(timerInterval)
-                    }
-            }).then((result) => {
-                /* Read more about handling dismissals below */
-                if (result.dismiss === Swal.DismissReason.timer) {
-                  console.log('I was closed by the timer')
-                }
-              })
-                setTimeout(() => {
-                    window.location.href = res.redirect
-                }, "5000")
+        url: url_php,
+        type: 'POST',
+        dataType: 'json',
+        async: true
+    })
 
-            }
+    .done(function ajaxDone(res) {
+        console.log(res);
+        if (res.error !== undefined) {
 
-        })
-        // falha
-        .fail(function ajaxError(e) {
-            console.log(e);
+        }
+        if (res.idUser !== undefined) {
+            console.log(res.idUser);
 
-        })
-        // Sempre
-        .always(function ajaxSempre() {
-            console.log("sempre");
-        })
+        }
 
-    return false
+    })
+
+
 })

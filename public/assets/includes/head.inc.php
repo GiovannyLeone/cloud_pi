@@ -1,3 +1,36 @@
+<?php
+
+$serverName = $_SERVER["SCRIPT_FILENAME"];
+$arrayServerName = explode("/", $serverName);
+// $arrayServerName[5] === fileName
+switch ($arrayServerName[5]) {
+    case 'index.php';
+    case 'index';
+    case '':
+        $title = "Cloud | Login";
+        break;
+
+    case 'feed.php':
+    case 'feed':
+        $title = "Cloud | Feed";
+        break;
+    
+    case 'profile.php':
+    case 'profile':
+        $title = "Cloud | Profile";
+        break;
+
+    case 'settings.php':
+    case 'settings':
+        $title = "Cloud | Settings";
+        break;
+
+    default:
+        $title = 'Cloud';
+        break;
+}
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,5 +40,8 @@
     <link rel="stylesheet" href="sweetalert2.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/includes/modal.inc/modal-styles.css">
-    <title>Cloud</title>
+    <link rel="stylesheet" href="assets/includes/inc.news/inc.menu-news.css">
+    <link rel="stylesheet" href="assets/includes/inc.feed/inc.menu-feed.css">
+    <link rel="stylesheet" href="assets/includes/inc.navegation/inc.menu-navegation.css">
+    <title><?=$title?></title>
 </head>

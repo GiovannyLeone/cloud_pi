@@ -131,7 +131,8 @@ class User
                 // Salvando o último ID do usuário
                 $idUser = $conn->lastInsertId();
                 // Iniciando Sessão
-                $_SESSION['id_user'] = (int) $idUser;
+                session_start();
+                $_SESSION['idUserSe'] = (int) $idUser;
                 // Mandado responda para página de cadastrado, redirecionamento e bool
                 $resArray['redirect'] = 'http://localhost/cloud_pi/public/feed';
                 $resArray['is_login'] = TRUE;
@@ -168,11 +169,11 @@ class User
             if ($consultSql->rowCount() == 1) {
                 // User já cadastradado
                 $existUser = $consultSql->fetch(PDO::FETCH_ASSOC);
-                $idUser = (int) $existUser['id_user'];
                 $userEmail = (string) $existUser['user_email'];
 
 
                 // Var de sessão
+                $idUserDB = (int) $existUser['id_user'];
                 $loginUserDB = (string) $existUser['username'];
                 $loginPassword = (string) $existUser['user_password'];
 
@@ -187,12 +188,14 @@ class User
                 // Encripty Pass
                 # if her
                 if ($criptUserPassword == $existUser['user_password']) {
-                    $_SESSION["id_user"] = $idUser;
+                    setcookie("idUser", $idUserDB);
                     setcookie("loginUser", $loginUserDB);
                     setcookie("loginPassword", $loginPassword);
 
                     session_start();
 
+                    $_SESSION['idUserSe'] = $idUserDB;
+                    $idUserSe = $_SESSION['idUserSe'];
                     $_SESSION['loginUserSe'] = $loginUserDB;
                     $_SESSION['loginPasswordSe'] = $loginPassword;
 

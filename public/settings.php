@@ -1,16 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <title>Cloud | Profile</title>
-</head>
-
+<?php include_once("assets/includes/head.inc.php") ?>
 <body>
-
   <main id="content">
     <!-- Settings -->
     <div id="settings">
@@ -21,14 +13,11 @@
       <a href="#"><h3>Settings</h3></a>
       <a href="#"><h3>Log out</h3></a>
       </div>
-
     </div>
-
-
   </main>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="assets/js/script.js"></script>
 </body>
+<!-- Modal structure -->
+<?php include_once("assets/includes/modal.inc/modal.inc.php") ?>
+<?php include_once("assets/includes/footer.inc.php") ?>
 
 </html>
