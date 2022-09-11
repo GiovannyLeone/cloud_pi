@@ -293,17 +293,6 @@ class User
 
 
 
-                // echo $UsernameSession;
-                // echo "<hr>";
-                // echo $username;
-                // echo "<hr>";
-                // echo $userEmailSession;
-                // echo "<hr>";
-                // echo $userEmail;
-                // echo "<hr>";
-
-
-
                 $userPassword = md5($userPassword);
                 $hash = md5($userEmail . $userPassword);
                 $userPassword = $hash;
