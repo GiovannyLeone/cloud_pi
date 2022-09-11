@@ -47,7 +47,7 @@
   </div>
 </body>
 <!-- Modal structure -->
-<?php include_once("assets/includes/modal.inc/modal.inc.php") ?>
+<?php include_once("assets/includes/inc.modal/inc.modal.php") ?>
 <?php include_once("assets/includes/footer.inc.php") ?>
 
 

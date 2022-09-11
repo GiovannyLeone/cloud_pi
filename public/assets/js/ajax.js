@@ -222,19 +222,17 @@ $("#updatePass").click((e) => {
 
     // Validando Campos do Form
     if (dataUpdateForm.updateEmailUser.length < 2 || dataUpdateForm.updateLoginUser.length < 2 ||
-        dataUpdateForm.updatePassUser.length <= 5 || dataUpdateForm.updatePassUserConf.length <= 5) {
+        dataUpdateForm.updatePassUser.length < 5 || dataUpdateForm.updatePassUserConf.length < 5) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...😥',
-            text: 'Credenciais invalidas ou senha muito curtaaa!',
-            footer: '<a href="">Por que precisamos dessas informações?</a>'
+            text: 'Credenciais invalidas ou senha muito curta!',
         })
     } else if (dataUpdateForm.updatePassUser !== dataUpdateForm.updatePassUserConf) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...😥',
             text: 'Credenciais invalidas ou senha muito curta!',
-            footer: '<a href="">Por que precisamos dessas informações?</a>'
         })
     } else {
 

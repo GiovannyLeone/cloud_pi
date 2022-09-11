@@ -39,7 +39,7 @@ switch ($arrayServerName[5]) {
     />
     <link rel="stylesheet" href="sweetalert2.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/includes/modal.inc/modal-styles.css">
+    <link rel="stylesheet" href="assets/includes/inc.modal/inc.modal.css">
     <link rel="stylesheet" href="assets/includes/inc.news/inc.menu-news.css">
     <link rel="stylesheet" href="assets/includes/inc.feed/inc.menu-feed.css">
     <link rel="stylesheet" href="assets/includes/inc.navegation/inc.menu-navegation.css">
