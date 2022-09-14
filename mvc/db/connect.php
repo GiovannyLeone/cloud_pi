@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('America/Sao_Paulo');
+
 $server = "localhost";
 $usernameDB = "root";
 $passwordDB = "";

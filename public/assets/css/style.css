@@ -231,6 +231,54 @@ input {
 }
 
 
+/*  forget password */
+
+.links-container span {
+    margin: 0 auto;
+}
+
+.password-info {
+    width: 90%;
+    margin: 20px 0;
+}
+
+.password-info a {
+    color: #03A9F4;
+    cursor: pointer;
+}
+
+.links-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.links-container aside i {
+    align-items: center;
+    justify-content: space-between;
+    font-size: 35px;
+    padding: 0 15px;
+}
+
+.link-login {
+    display: flex;
+    flex-direction: column;
+}
+
+.link-login span:nth-child(2) {
+    display: flex;
+    font-size: 40px;
+    padding: 0 15px;
+}
+
+.link-login span:nth-child(2) a i {
+    color: #3F47CD;
+    padding: 0 15px;
+}
+
+
+/* End  forget passoword */
+
+
 /* End code for login */
 
 
@@ -241,7 +289,6 @@ input {
     width: 85vw;
     margin: 0px auto;
 }
-
 
 
 /* Settings */

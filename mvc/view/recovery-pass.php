@@ -24,24 +24,37 @@
          <style>
          @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
          *{
+        
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Raleway', sans-serif;
             font-weight:500;
+         }
+
+         .top{
+            height:100%;  
+            background-color:#fff;
+            background-size: cover;
+         }
+
+         .texth2{
+            font-size: 20px;
+            font-weight: 500;
+        }
          </style>
 
-         <div style='height:100%;'>
+         <div class='top'>
          <div>
             <div>
+            
                 <div style='display:flex; align-items: center; height: 100px;'>
-                    <h1 style='white-space: nowrap; padding: 0 20px;'>Recuperar senha</h1>
-                    <img style='height: 80px;' src='http://localhost/cloud_pi/public/assets/img/marca-d-agua-cloud_600x.png'>
+                    <img style='padding-left: 25px; margin-top: -25px; height: 100px;' src='http://localhost/cloud_pi/public/assets/img/logo-cloud_1@600x.png'>
                 </div>
+                <h1 style='white-space: nowrap; padding: 0 20px; color: #767be4;'>Recuperar senha</h1>
                 <div>
-                    <h2 style='width:60%; text-align:justify; margin: 50px auto;'>
-                        Olá, " . $username . ", Recebemos uma solicitação para restaurar sua senha de acesso. Ela ocorreu em " . $dateRecovery . ' - ' . $timeRecovery . 
-                        
+                    <h2 class='texth2' style='width:60%;  background-color: #FFFFFFCC; box-shadow: 0px 0px 40px 5px #767be4;   text-align:justify; margin: 50px auto; padding: 50px;'>
+                        Olá, " . $username . ", Recebemos uma solicitação para restaurar sua senha de acesso. Ela ocorreu em <br /> " . $dateRecovery . ' - ' . $timeRecovery . 
                         "<br>
                         Para alterarar a senha basta clicar no link abaixo de recuperação de senha, caso não foi você sugerimos melhorar a segurança da sua conta trocando sua senha
                         e verificar se apenas você está com acesso ao seu Email
@@ -49,7 +62,8 @@
                         Para demais problemas estamos a disposição 
                         <br>
                         <span style='display:flex; color: #767be4; font-style: italic; justify-content: flex-end;'>Equipe Cloud</span>
-                        <img style='height: 400px; text-align: center;' src='http://localhost/cloud_pi/public/assets/img/logo-cloud_1@600x.png'>
+                        <img style='padding-left: 25px; margin-top: -25px; height: 100px;' src='http://localhost/cloud_pi/public/assets/img/logo-cloud_1@600x.png'>
+                        
                         <a href='$urlRecovery' target='_blank'>$urlRecoveryShow</a>
                         <br>
                         <br>

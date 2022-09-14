@@ -107,18 +107,18 @@
     <!-- Modal recovery Pass  -->
 
     <div id="modalRecoveryPass">
-        <div style="height: 90vh;">
+        <div class="modalRecoveryPass">
 
-            <a href="#" data-izimodal-open="#modal" data-izimodal-transitionin="fadeInDown">X CLOSE MODAL |||||||</a>
+            <a href="#" data-izimodal-open="#modal" data-izimodal-transitionin="fadeInDown"></a>
             <!--  The attr 'data-iziModal-preventClose' will allow the already open modal is not closed.-->
 
-            <a href="#" data-izimodal-open="#another-modal" data-izimodal-zindex="20000" data-izimodal-preventclose="">Another Modal</a>
+            <a href="#" data-izimodal-open="#another-modal" data-izimodal-zindex="20000" data-izimodal-preventclose=""></a>
 
             <!-- You can also use: data-iziModal-transitionOut="fadeOutDown" without data-iziModal-preventClose -->
 
             <div>
                 <form method="POST" class="recovery-pass-form">
-                    <div style="background-color: #FFF; width:100%; text-align:center; padding: 20px 0;">
+                    <div class="modalRecoveryConta">
                     <h2>Recuperar Senha</h2>
                     
                     <input class="recovery-pass-email" type="email" name="forgetEmail" id="forgetEmail" placeholder="Digite seu Email">

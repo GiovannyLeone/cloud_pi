@@ -1,3 +1,5 @@
+var baseURL = "http://localhost/cloud_pi/"
+
 $("#btnSetUsers").click((e) => {
     e.preventDefault()
 
@@ -15,16 +17,16 @@ $("#btnSetUsers").click((e) => {
     } else if (dataForm.setFormEmail.length < 6) {
         $('.msgError').text("Email invalido!").show()
         return false
-    } else if (dataForm.setFormPassword.length < 2) {
+    } else if (dataForm.setFormPassword.length < 5) {
         $('.msgError').text("Sua Senha deve ter 6 caracteres no minímo!").show()
         return false
     }
     $(".msgError").hide()
-    let url_php = 'http://localhost/cloud_pi/mvc/model/user-register.php'
+    let urlResgister =  baseURL + 'mvc/model/user-register.php'
 
 
     $.ajax({
-            url: url_php,
+            url: urlResgister,
             type: 'POST',
             data: dataForm,
             dataType: 'json',
@@ -38,7 +40,9 @@ $("#btnSetUsers").click((e) => {
                 return false
             }
             if (res.redirect !== undefined) {
-                window.location = res.redirect
+                window.location = baseURL + res.redirect
+                sessionStorage.setItem('keyIdentityUser', res.identityUser);
+
             }
 
         })
@@ -79,10 +83,10 @@ $("#btnGetUsers").click((e) => {
         return false
     }
     $(".msgError").hide()
-    let url_php = 'http://localhost/cloud_pi/mvc/model/user-login.php'
+    let urlLogin =  baseURL + 'mvc/model/user-login.php'
 
     $.ajax({
-            url: url_php,
+            url: urlLogin,
             type: 'POST',
             data: dataForm,
             dataType: 'json',
@@ -105,7 +109,10 @@ $("#btnGetUsers").click((e) => {
                 return false
             }
             if (res.redirect !== undefined) {
-                window.location = res.redirect
+                // window.location = res.redirect
+
+                sessionStorage.setItem('keyIdentityUser', res.identityUser);
+                console.log(sessionStorage.getItem('keyIdentityUser'))
             }
 
         })
@@ -175,6 +182,10 @@ $("#forgetPass").click((e) => {
             }
             if (res.redirect !== undefined) {
 
+                const imgURL = "public/assets/img/marca-d-agua-cloud-branco@600x.png"
+
+                let requestURL = baseURL + imgURL
+
                 let hashUser = {
                     redirectURL: res.redirect,
                     username: res.username,
@@ -184,11 +195,12 @@ $("#forgetPass").click((e) => {
                     time: res.time
                 }
                 console.log(res.hashUser);
-                Swal.fire(
-                    'Muito bem! 🥳',
-                    'Cheque sua caixa de email para redefinir sua senha!',
-                    'success'
-                )
+                Swal.fire({
+                    html: 'Cheque sua caixa de email para redefinir sua senha! ',
+                    imageUrl: requestURL,
+                    imageHeight: 60,
+                    icon: 'success',
+                })
                 setTimeout(() => {
                     window.location.href = res.redirect + "?idRec=" + hashUser.hash + "&idEmail=" + hashUser.userEmail + "&idUsername=" + hashUser.username + "&idDate=" + hashUser.date + "&idTime=" + hashUser.time
                 }, "5000")

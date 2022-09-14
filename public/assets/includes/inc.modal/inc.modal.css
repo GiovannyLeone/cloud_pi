@@ -263,3 +263,18 @@
 .recover-pass-user {
     padding: 5px;
 }
+
+
+/* Modal recovery Pass  */
+
+.modalRecoveryPass {
+    height: 70vh
+}
+
+.modalRecoveryConta {
+    background-color: #FFFFFFCC;
+    box-shadow: 0px 0px 40px 5px #000;
+    width: 25%;
+    text-align: center;
+    padding: 20px 0;
+}

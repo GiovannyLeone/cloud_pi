@@ -54,6 +54,6 @@ $(document).on('click', '.trigger', function(event) {
 });
 
 $("#modalRecoveryPass").iziModal({
+    width: 1200,
     radius: 5,
-    padding: 20,
 });

@@ -128,13 +128,12 @@ class User
                 $newUser->bindParam(':id_status', $idStatus, PDO::PARAM_INT);
                 $newUser->execute();
 
-                // Salvando o último ID do usuário
-                $idUser = $conn->lastInsertId();
                 // Iniciando Sessão
                 session_start();
-                $_SESSION['idUserSe'] = (int) $idUser;
+                $_SESSION['identityUser'] = (string) $newHash;
                 // Mandado responda para página de cadastrado, redirecionamento e bool
-                $resArray['redirect'] = 'http://localhost/cloud_pi/public/feed';
+                $resArray['redirect'] = 'mvc/view/profile-create/';
+                $resArray['identityUser'] = $_SESSION['identityUser'];
                 $resArray['is_login'] = TRUE;
             }
 
@@ -176,6 +175,7 @@ class User
                 $idUserDB = (int) $existUser['id_user'];
                 $loginUserDB = (string) $existUser['username'];
                 $loginPassword = (string) $existUser['user_password'];
+                $identityUser = (string) $existUser['hash'];
 
                 $hash = md5($userEmail . $userPassword);
                 $userPassword = $hash;
@@ -195,11 +195,12 @@ class User
                     session_start();
 
                     $_SESSION['idUserSe'] = $idUserDB;
-                    $idUserSe = $_SESSION['idUserSe'];
                     $_SESSION['loginUserSe'] = $loginUserDB;
                     $_SESSION['loginPasswordSe'] = $loginPassword;
+                    $_SESSION['identityUser'] = $identityUser;
 
-                    $resArray['redirect'] = 'http://localhost/cloud_pi/public/feed';
+                    $resArray['redirect'] = 'public/feed';
+                    $resArray['identityUser'] = $_SESSION['identityUser'];
                 } else {
                     $resArray['error'] = "Os dados não são validos!";
                 }

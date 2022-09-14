@@ -37,8 +37,23 @@
               </div>
               <a id="goRight" class="off">Cadastre-se</a>
               <button id="btnGetUsers" type="submit">Entrar</button>
-              <a data-izimodal-open="#modalRecoveryPass" data-izimodal-transitionin="fadeInDown">Esqueci a senha</a>
-              <p class="msgError" style="display: none;">Erro</p>
+              <p class="msgError" style="display: none;">Erro</p>              
+              
+              <section class="links-container">
+                <div class="password-info">
+                <a class="modalRecoveryPass" data-izimodal-open="#modalRecoveryPass" data-izimodal-transitionin="fadeInDown">Esqueceu sua senha?</a>
+                </div>
+
+                <div class="link-login">
+                  <span>Ou entre com:</span>
+                  <span>
+                    <a href="#"><i class="fab fa-google-plus-square google"></i></a>
+                    <a href="#"><i class="fab fa-facebook-square facebook"></i></a>
+                    <a href="#"><i class="fab fa-brands fa-twitter"></i></a>
+                  </span>
+                </div>
+              </section>
+
             </form>
           </div>
         </div>
