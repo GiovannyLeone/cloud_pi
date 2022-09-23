@@ -1,6 +1,6 @@
 <?php
 include_once("class.user.php");
-class Profile 
+class Profile extends User
 {
     // Criando Variaveis
     private int $idCloudCode;
@@ -91,15 +91,35 @@ class Profile
             header("Content-Type: application/json");
             $resArray = [];
 
-            $idUser = $this->idUser;
+            $keyHash = $this->hash;
+
+            $consultUser = $conn->prepare("SELECT id_user FROM tb_user WHERE hash = :userHash LIMIT 1");
+            $consultUser->bindParam(':userHash', $keyHash, PDO::PARAM_STR);
+            $consultSql->execute();
+
+            if ($consultSql->rowCount() === 1) {
+                // Pegando dados para construir Profile
+                $idCloudCode = $this->idCloudCode;
+                $nameProfile = $this->name;
+                $ageProfile = $this->age;
+                $biographyProfile = $this->biographyProfile;
+                $idLocation = $this->idLocation;
+                $idImage = $this->idImage;
+                $idUser = $this->idUser;
+                $resArray["redirect"] =  "Work";
+
+            } else {
+                $resArray["error"] =  "Don´t Work";
+
+            }
 
             $resArray["idUser"] =  $idUser;
             
+        }else{
+            exit("fora!");
         }
-
         echo json_encode($resArray);
-
         
-    }
+    } 
 
 }

@@ -3,6 +3,10 @@
     --royalBlueHover: #767be4;
 }
 
+body{
+    background-color: #000;
+}
+
 input{
     border-bottom: 2px solid var(--royalBlueHover);
 }
