@@ -110,9 +110,9 @@ $("#btnGetUsers").click((e) => {
             }
             if (res.redirect !== undefined) {
                 // window.location = res.redirect
-
-                sessionStorage.setItem('keyIdentityUser', res.identityUser);
-                console.log(sessionStorage.getItem('keyIdentityUser'))
+                localStorage.removeItem('keyIdentityUser');
+                localStorage.setItem('keyIdentityUser', res.identityUser);
+                console.log(localStorage.getItem('keyIdentityUser'))
             }
 
         })

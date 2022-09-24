@@ -1,30 +1,8 @@
 const requestUser = {
-    identityUser: sessionStorage.getItem('keyIdentityUser')
+    identityUser: localStorage.getItem('keyIdentityUser')
 }
 var baseURL = "http://localhost/cloud_pi/"
-
-
-$.ajax({
-        url: baseURL + "mvc/model/profile-login.php",
-        type: 'POST',
-        data: requestUser,
-        dataType: 'json',
-        async: true
-    })
-    // Sucess
-    .done(function ajaxDone(res) {
-        console.log(res);
-        if (res.error !== undefined) {
-            alert("Deu Ruim!")
-            return false
-        }
-        if (res.redirect !== undefined) {
-            alert("Deu Bão!")
-
-        }
-
-    })
-
+console.log(requestUser.identityUser);
 
 // console.log(identityUser);
 
@@ -68,17 +46,17 @@ setTimeout(() => {
                     min: 8,
                     max: 120,
                     step: 1,
-                    class: "ageProfile"
+                    class: "profileAge"
                 },
                 inputValue: 21,
                 preConfirm: () => {
-                    const ageProfile = Swal.getPopup().querySelector('.ageProfile').value
+                    const profileAge = Swal.getPopup().querySelector('.profileAge').value
 
-                    return { ageProfile: ageProfile }
+                    return { profileAge: profileAge }
 
                 }
             }).then((res) => {
-                var ageProfile = res.value.ageProfile
+                var profileAge = res.value.profileAge
                 swal.fire({
                     title: 'Gostaria de contar um pouco da sua história...',
                     icon: 'question',
@@ -100,9 +78,9 @@ setTimeout(() => {
                         confirmButtonText: "Confirmar",
                         html: `
                            <select id="country" name="country">
-                              <option valeu="default" selected>País</option>
-                              <option valeu="BR">Brasil</option>
-                              <option valeu="AR">Argentina</option>
+                              <option value="default" selected>País</option>
+                              <option value="1">Brasil</option>
+                              <option value="2">Argentina</option>
                            </select>
 
                               `,
@@ -122,9 +100,9 @@ setTimeout(() => {
                             html: ` 
 
                             <select id="state" name="state">
-                            <option valeu="default" selected>Selecione o estado</option>
-                            <option value="AC">Acre</option>
-                            <option value="AL">Alagoas</option>
+                            <option value="default" selected>Selecione o estado</option>
+                            <option value="1">Acre</option>
+                            <option value="2">Alagoas</option>
                             <option value="AP">Amapá</option>
                             <option value="AM">Amazonas</option>
                             <option value="BA">Bahia</option>
@@ -162,49 +140,90 @@ setTimeout(() => {
 
                         }).then((res) => {
                             var StateProfile = res.value.StateProfile
-                            swal.fire({
-                                title: 'sua cidade?...',
+
+                            Swal.fire({
+                                title: 'Queremos te ver! Adicione uma foto',
                                 icon: 'question',
                                 confirmButtonText: "Confirmar",
-                                html: `<input type="text" id="userCity" placeholder="Sua cidade?">`,
+                                html: `<input type='file' id='imageProfile'>`,
                                 focusConfirm: false,
+
                                 preConfirm: () => {
-                                    const userCity = Swal.getPopup().querySelector('#userCity').value
-                                    return { userCity: userCity }
+                                    let imageProfile = $('#imageProfile').val()
+                                    const pathImage = imageProfile.split('\\')[2]
+                                    if (pathImage.split('.')[1] === "png") {
+                                        console.log(pathImage);
+                                        return { pathImage: pathImage }
+                                    }
+
                                 }
                             }).then((res) => {
-                                var userCity = res.value.userCity
-                                Swal.fire({
-                                    title: 'Queremos te ver! Adicione uma foto',
-                                    icon: 'question',
-                                    confirmButtonText: "Confirmar",
-                                    html: `<input type='file' id='imageProfile'>`,
-                                    focusConfirm: false,
+                                var pathImage = res.value.pathImage
+                                let urlResgister = baseURL + 'mvc/model/profile-login.php'
 
-                                    preConfirm: () => {
-                                        let imageProfile = $('#imageProfile').val()
-                                        const pathImage = imageProfile.split('\\')[2]
-                                        if (pathImage.split('.')[1] === "png") {
-                                            console.log(pathImage);
-                                            return { pathImage: pathImage }
+                                const dataProfile = {
+                                    codeCloud: `${ codeCloud }`,
+                                    profileName: `${ profileName }`,
+                                    profileAge: `${ profileAge }`,
+                                    biographyProfile: `${ biographyProfile }`,
+                                    idCountry: `${ CountryProfile }`,
+                                    idState: `${ StateProfile }`,
+                                    pathImage: `profile/${ pathImage }`,
+                                    keyIdentityUser: `${ requestUser.identityUser }`
+                                }
+                                $.ajax({
+                                    url: urlResgister,
+                                    type: 'POST',
+                                    data: dataProfile,
+                                    dataType: 'json',
+                                    async: true
+                                })
+
+                                // Sucess
+                                .done(function ajaxDone(res) {
+                                        console.log(res);
+                                        if (res.error !== undefined) {
+                                            $('.msgError').text("Nome de Usuário ou senha invalidos!").show()
+                                            $(".msgError").text(res.error).show()
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Oops...😥',
+                                                text: 'Algo deu errado',
+                                                confirmButtonColor: '#767be4',
+                                                confirmButtonText: 'Confirmar',
+                                            })
+                                            return false
+                                        }
+                                        if (res.redirect !== undefined) {
+                                            // window.location = res.redirect
+                                            // window.location.href = urlResgister
+                                            console.log(res.idLocation)
+
                                         }
 
-                                    }
-                                }).then((res) => {
-                                    var pathImage = res.value.pathImage
-                                    Swal.fire(`
+                                    })
+                                    // falha
+                                    .fail(function ajaxError(e) {
+                                        console.log(e);
+
+                                    })
+                                    // Sempre
+                                    .always(function ajaxSempre() {
+                                        console.log("sempre");
+                                    })
+
+
+                                Swal.fire(`
                                     codeCloud: ${ codeCloud }
                                     Name: ${ profileName }
-                                    Idade: ${ ageProfile }
+                                    Idade: ${ profileAge }
                                     Sua Biografia: ${ biographyProfile }
                                     Seu País: ${ CountryProfile }
                                     Seu Estado: ${ StateProfile }
-                                    Sua Cidade: ${ userCity }
                                     Caminho Image: ${ pathImage }
                                     `.trim())
-                                })
-
                             })
+
                         })
                     })
                 })

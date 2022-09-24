@@ -1,15 +1,16 @@
 <?php
 include_once("class.user.php");
-class Profile extends User
+class Profile
 {
     // Criando Variaveis
     private int $idCloudCode;
-    private int $name;
+    private string $name;
     private int $age;
-    private int $biographyProfile;   
+    private string $biographyProfile;   
     private int $idLocation;   
     private int $idImage;   
-    private int $idUser;   
+    private int $idUser; 
+    
 
     // Dados Profile
 
@@ -53,19 +54,59 @@ class Profile extends User
         return $this->biographyProfile;
     }
 
-    public function setIdLocation(int $idLocation)
+    public function setIdLocation(int $idCountry, int $idState)
     {
-        return $this->idLocation = $idLocation;
+
+        if ( $idCountry === 1) {
+            // Brasil
+            if ( $idState === 1) {
+                $idLocation = (int) 1;
+                return $this->idLocation = $idLocation;
+
+            } else if ($idState === 2) {
+                $idLocation = (int) 2;
+                return $this->idLocation = $idLocation;
+
+            }
+
+
+
+
+        } else if ( $idCountry === 2 ) {
+            // Argentina
+            if ( $idState === 1) {
+                $idLocation = (int) 3;
+                return $this->idLocation = $idLocation;
+
+            } else if ($idState === 2) {
+                $idLocation = (int) 4;
+                return $this->idLocation = $idLocation;
+                
+            }
+
+            
+        } else if ( $idCountry === 3 ) {
+            // EUA
+            if ( $idState === 1) {
+                $idLocation = (int) 5;
+                return $this->idLocation = $idLocation;
+
+            } else if ($idState === 2) {
+                $idLocation = (int) 6;
+                return $this->idLocation = $idLocation;
+            }
+        }
+
     }
 
-    public function getIdLocation(int $idLocation)
+    public function getIdLocation(int $idCountry, int $idState)
     {
         return $this->idLocation;
     }
 
     public function setIdImage(int $idImage)
     {
-        return $this->idLocation = $idImage;
+        return $this->idImage = $idImage;
     }
 
     public function getIdImage(int $idImage)
@@ -83,7 +124,7 @@ class Profile extends User
         return $this->idUser;
     }
 
-    public function registerProfile()
+    public function registerProfile(string $keyHashUser)
     {
         require '../db/connect.php';
 
@@ -91,29 +132,39 @@ class Profile extends User
             header("Content-Type: application/json");
             $resArray = [];
 
-            $keyHash = $this->hash;
+            $keyHash = $keyHashUser;
 
-            $consultUser = $conn->prepare("SELECT id_user FROM tb_user WHERE hash = :userHash LIMIT 1");
+            $consultUser = $conn->prepare("SELECT id_user,user_email FROM tb_user WHERE hash = :userHash LIMIT 1");
             $consultUser->bindParam(':userHash', $keyHash, PDO::PARAM_STR);
-            $consultSql->execute();
+            $consultUser->execute();
 
-            if ($consultSql->rowCount() === 1) {
+            if ($consultUser->rowCount() === 1) {
                 // Pegando dados para construir Profile
-                $idCloudCode = $this->idCloudCode;
                 $nameProfile = $this->name;
                 $ageProfile = $this->age;
                 $biographyProfile = $this->biographyProfile;
+
                 $idLocation = $this->idLocation;
-                $idImage = $this->idImage;
-                $idUser = $this->idUser;
+
+
+                // $idImage = $this->idImage;
+                // $idUser = $this->idUser;
+
+
+
+                $existUser = $consultUser->fetch(PDO::FETCH_ASSOC);
+                $userEmail = (string) $existUser['user_email'];
+
+
                 $resArray["redirect"] =  "Work";
+                $resArray['idLocation'] = $idLocation;
+                $resArray['emailUser'] = $userEmail;
 
             } else {
                 $resArray["error"] =  "Don´t Work";
 
             }
 
-            $resArray["idUser"] =  $idUser;
             
         }else{
             exit("fora!");

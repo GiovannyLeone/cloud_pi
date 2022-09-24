@@ -1,12 +1,13 @@
-:root { /* document for Color */
+:root {
+    /* document for Color */
     --royalBlue: #3F47CD;
     --royalBlueHover: #767be4;
 }
 
-body{
-    background-color: #000;
+body {
+    background: var(--royalBlueHover);
 }
 
-input{
+input {
     border-bottom: 2px solid var(--royalBlueHover);
 }
