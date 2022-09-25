@@ -41,7 +41,9 @@ $("#btnSetUsers").click((e) => {
             }
             if (res.redirect !== undefined) {
                 window.location = baseURL + res.redirect
-                sessionStorage.setItem('keyIdentityUser', res.identityUser);
+                const identityUser = res.identityUser
+                localStorage.removeItem('keyIdentityUser');
+                localStorage.setItem('keyIdentityUser', identityUser);
 
             }
 
@@ -110,9 +112,9 @@ $("#btnGetUsers").click((e) => {
             }
             if (res.redirect !== undefined) {
                 // window.location = res.redirect
+                const identityUser = res.identityUser
                 localStorage.removeItem('keyIdentityUser');
-                localStorage.setItem('keyIdentityUser', res.identityUser);
-                console.log(localStorage.getItem('keyIdentityUser'))
+                localStorage.setItem('keyIdentityUser', identityUser);
             }
 
         })

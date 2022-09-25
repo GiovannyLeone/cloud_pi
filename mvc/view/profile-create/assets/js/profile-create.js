@@ -164,10 +164,10 @@ setTimeout(() => {
                                 const dataProfile = {
                                     codeCloud: `${ codeCloud }`,
                                     profileName: `${ profileName }`,
-                                    profileAge: `${ profileAge }`,
+                                    profileAge: profileAge,
                                     biographyProfile: `${ biographyProfile }`,
-                                    idCountry: `${ CountryProfile }`,
-                                    idState: `${ StateProfile }`,
+                                    idCountry: CountryProfile,
+                                    idState: StateProfile,
                                     pathImage: `profile/${ pathImage }`,
                                     keyIdentityUser: `${ requestUser.identityUser }`
                                 }
@@ -198,6 +198,7 @@ setTimeout(() => {
                                             // window.location = res.redirect
                                             // window.location.href = urlResgister
                                             console.log(res.idLocation)
+                                            console.log(res.idcloudCode)
 
                                         }
 

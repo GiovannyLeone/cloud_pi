@@ -4,11 +4,7 @@ $baseURL = "http://localhost/cloud_pi/public/";
 
 ?><!DOCTYPE html>
 <?php include_once("profile-head.php")?>
-<body>
-
-    
-</body>
-
+<body></body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="<?=$baseURL?>assets/js/scripts.js"></script>
@@ -16,5 +12,4 @@ $baseURL = "http://localhost/cloud_pi/public/";
 <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.6.1/js/iziModal.js" integrity="sha512-1J0h9sFPFsywGN1ZMdHRX7n94nW1lvmX+yNAqcsSJSdayFsGE935ginqQ31R6rwxarOKG7j//Km5SB6cOT8aUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="<?=$baseURL?>assets/js/modal.js"></script>
 <script src="assets/js/profile-create.js"></script>
-
 </html>

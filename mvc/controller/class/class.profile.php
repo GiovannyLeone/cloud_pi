@@ -1,9 +1,9 @@
 <?php
-include_once("class.user.php");
-class Profile
+// include_once("class.user.php");
+ include_once("class.cloudcode.php");
+class Profile extends CloudCode
 {
     // Criando Variaveis
-    private int $idCloudCode;
     private string $name;
     private int $age;
     private string $biographyProfile;   
@@ -13,17 +13,6 @@ class Profile
     
 
     // Dados Profile
-
-    public function setIdCloudCode(int $idCloudCode)
-    {
-        return $this->idCloudCode = $idCloudCode;
-    }
-
-    public function getIdCloudCode(int $idCloudCode)
-    {
-        return $this->idCloudCode;
-    }
-
     public function setName(string $name)
     {
         return $this->name = $name;
@@ -143,8 +132,10 @@ class Profile
                 $nameProfile = $this->name;
                 $ageProfile = $this->age;
                 $biographyProfile = $this->biographyProfile;
-
                 $idLocation = $this->idLocation;
+
+                
+                $rescloudcode = $this->registerCloudCode();
 
 
                 // $idImage = $this->idImage;
@@ -157,6 +148,7 @@ class Profile
 
 
                 $resArray["redirect"] =  "Work";
+                $resArray["idcloudCode"] = $rescloudcode;
                 $resArray['idLocation'] = $idLocation;
                 $resArray['emailUser'] = $userEmail;
 
