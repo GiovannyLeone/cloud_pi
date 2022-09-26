@@ -32,7 +32,7 @@ $("#btnSetUsers").click((e) => {
             dataType: 'json',
             async: true
         })
-        // Sucess
+        // Success
         .done(function ajaxDone(res) {
             console.log(res);
             if (res.error !== undefined) {
@@ -94,7 +94,7 @@ $("#btnGetUsers").click((e) => {
             dataType: 'json',
             async: true
         })
-        // Sucess
+        // Success
         .done(function ajaxDone(res) {
             console.log(res);
             if (res.error !== undefined) {

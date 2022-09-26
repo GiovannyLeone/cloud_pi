@@ -137,8 +137,6 @@ class Profile extends CloudCode
                 $existUser = $consultUser->fetch(PDO::FETCH_ASSOC);
                 $idUser = (int) $existUser['id_user'];
 
-
-                // $resArray["redirect"] =  TRUE;
                 $resArray['idLocation'] = $idLocation;
                 if ($nameProfile && $ageProfile && $biographyProfile && $idLocation && $idUser) {
                     $idCloudCode = $this->reqIdCloudCode();
@@ -170,15 +168,10 @@ class Profile extends CloudCode
                         $insertProfile->bindParam(':idUser', $idUser, PDO::PARAM_INT);
                         $insertProfile->execute();
                     }
-
                 }
-
             } else {
                 $resArray["error"] =  "Don´t Work";
-
             }
-
-            
         }else{
             exit("fora!");
         }

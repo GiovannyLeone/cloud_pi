@@ -61,8 +61,6 @@ class CloudCode
 
                         return $resCloudCode;
                     }
-
-                    // return 
                 } else {
                     $resArray["error"] =  "Don´t Work";
                 }
@@ -87,16 +85,9 @@ class CloudCode
                 if ($consultCloudCode->rowCount() === 1) {
                     $getCloudCode = $consultCloudCode->fetch(PDO::FETCH_ASSOC);
                     $resIdCloudCode = (int) $getCloudCode['id_cloud_code'];
-                    // $resCloudCode = (string) $getCloudCode['cloud_code'];
-                    // $resStatusCloudCode = (int) $getIdCloudCode['id_status'];
-
                     $resArray['resIdCloudCode'] = $resIdCloudCode;
-
-
                     return $resArray['resIdCloudCode'];
                 }
-
-                // return 
         }
 
     }

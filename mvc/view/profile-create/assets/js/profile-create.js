@@ -179,7 +179,7 @@ setTimeout(() => {
                                     async: true
                                 })
 
-                                // Sucess
+                                // Success
                                 .done(function ajaxDone(res) {
                                         console.log(res);
                                         if (res.error !== undefined) {

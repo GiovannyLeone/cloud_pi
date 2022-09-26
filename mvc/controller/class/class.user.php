@@ -106,19 +106,12 @@ class User
                 $saltPassword = $hash;
                 $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
                 
-                
-
                 // Gera um hash baseado em bcrypt
                 $custoHash = '06';
                 $saltHash = $hash;
                 $newHash = crypt($criptUserPassword, '$2b$' . $custoHash . '$' . $saltHash . '$');
-
                 #Setando Status
-                $idStatus = 2;
-
-                
-
-                
+                $idStatus = (int) 2;
 
                 $newUser = $conn->prepare("INSERT INTO tb_user (username, user_email, user_password, hash, id_status) VALUES(:username, :user_email, :user_password, :hash, :id_status)");
                 $newUser->bindParam(':username', $username, PDO::PARAM_STR);
@@ -131,7 +124,7 @@ class User
                 // Iniciando Sessão
                 session_start();
                 $_SESSION['identityUser'] = (string) $newHash;
-                // Mandado responda para página de cadastrado, redirecionamento e bool
+                // Mandado resposta para página de cadastrado, redirecionamento e bool
                 $resArray['redirect'] = 'mvc/view/profile-create/';
                 $resArray['identityUser'] = $_SESSION['identityUser'];
                 $resArray['is_login'] = TRUE;
