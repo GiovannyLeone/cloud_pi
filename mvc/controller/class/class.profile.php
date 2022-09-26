@@ -123,7 +123,7 @@ class Profile extends CloudCode
 
             $keyHash = $keyHashUser;
 
-            $consultUser = $conn->prepare("SELECT id_user,user_email FROM tb_user WHERE hash = :userHash LIMIT 1");
+            $consultUser = $conn->prepare("SELECT id_user FROM tb_user WHERE hash = :userHash LIMIT 1");
             $consultUser->bindParam(':userHash', $keyHash, PDO::PARAM_STR);
             $consultUser->execute();
 
@@ -134,23 +134,44 @@ class Profile extends CloudCode
                 $biographyProfile = $this->biographyProfile;
                 $idLocation = $this->idLocation;
 
-                
-                $rescloudcode = $this->registerCloudCode();
-
-
-                // $idImage = $this->idImage;
-                // $idUser = $this->idUser;
-
-
-
                 $existUser = $consultUser->fetch(PDO::FETCH_ASSOC);
-                $userEmail = (string) $existUser['user_email'];
+                $idUser = (int) $existUser['id_user'];
 
 
-                $resArray["redirect"] =  "Work";
-                $resArray["idcloudCode"] = $rescloudcode;
+                // $resArray["redirect"] =  TRUE;
                 $resArray['idLocation'] = $idLocation;
-                $resArray['emailUser'] = $userEmail;
+                if ($nameProfile && $ageProfile && $biographyProfile && $idLocation && $idUser) {
+                    $idCloudCode = $this->reqIdCloudCode();
+
+                    $consultIdCloudCode = $conn->prepare("SELECT id_cloud_code FROM tb_cloud_code WHERE id_cloud_code = :idCloudCode LIMIT 1");
+                    $consultIdCloudCode->bindParam(':idCloudCode', $idCloudCode, PDO::PARAM_STR);
+                    $consultIdCloudCode->execute();
+
+                    $existCloudCode = $consultIdCloudCode->fetch(PDO::FETCH_ASSOC);
+                    $idCloudCode = (int) $existCloudCode['id_cloud_code'];
+
+                    if ($idCloudCode) {
+                        $insertProfile = $conn->prepare("INSERT INTO tb_cloud_code (cloud_code, name, age, biography_profile, id_location, id_image, id_user) 
+                        VALUES(
+                        :cloudCode,
+                        :nameProfile,
+                        :ageProfile,
+                        :bioProfile,
+                        :idlocation,
+                        :idImage,
+                        :idUser
+                        )");
+                        $insertProfile->bindParam(':cloudCode', $cloudCode, PDO::PARAM_STR);
+                        $insertProfile->bindParam(':nameProfile', $nameProfile, PDO::PARAM_STR);
+                        $insertProfile->bindParam(':ageProfile', $ageProfile, PDO::PARAM_INT);
+                        $insertProfile->bindParam(':bioProfile', $biographyProfile, PDO::PARAM_STR);
+                        $insertProfile->bindParam(':idlocation', $idLocation, PDO::PARAM_INT);
+                        $insertProfile->bindParam(':idImage', $idImage, PDO::PARAM_INT);
+                        $insertProfile->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+                        $insertProfile->execute();
+                    }
+
+                }
 
             } else {
                 $resArray["error"] =  "Don´t Work";

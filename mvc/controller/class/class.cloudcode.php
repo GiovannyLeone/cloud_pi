@@ -43,7 +43,7 @@ class CloudCode
             header("Content-Type: application/json");
             $resArray = [];
             $cloudCode = $this->cloudCode;
-            $idStatus = $this->idStatus;
+            $idStatus = 2;
             if (isset($cloudCode) && isset($idStatus)) {
                 $insertCloudCode = $conn->prepare("INSERT INTO tb_cloud_code (cloud_code, id_status) VALUES(:cloudCode, :idStatus)");
                 $insertCloudCode->bindParam(':cloudCode', $cloudCode, PDO::PARAM_STR);
@@ -70,5 +70,34 @@ class CloudCode
         } else {
             exit("fora!");
         }
+        echo json_encode($resArray);
+    }
+    public function reqIdCloudCode()
+    {
+    require '../db/connect.php';
+        $resArray = [];
+        $cloudCode = $this->cloudCode;
+        $idStatus = 2;
+        if (isset($cloudCode) && isset($idStatus)) {
+            
+                $consultCloudCode = $conn->prepare("SELECT * FROM tb_cloud_code WHERE cloud_code = :cloudCode AND id_status = :idStatus LIMIT 1");
+                $consultCloudCode->bindParam(':cloudCode', $cloudCode, PDO::PARAM_STR);
+                $consultCloudCode->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
+                $consultCloudCode->execute();
+                if ($consultCloudCode->rowCount() === 1) {
+                    $getCloudCode = $consultCloudCode->fetch(PDO::FETCH_ASSOC);
+                    $resIdCloudCode = (int) $getCloudCode['id_cloud_code'];
+                    // $resCloudCode = (string) $getCloudCode['cloud_code'];
+                    // $resStatusCloudCode = (int) $getIdCloudCode['id_status'];
+
+                    $resArray['resIdCloudCode'] = $resIdCloudCode;
+
+
+                    return $resArray['resIdCloudCode'];
+                }
+
+                // return 
+        }
+
     }
 }

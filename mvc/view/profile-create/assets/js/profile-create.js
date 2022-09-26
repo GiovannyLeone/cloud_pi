@@ -198,8 +198,7 @@ setTimeout(() => {
                                             // window.location = res.redirect
                                             // window.location.href = urlResgister
                                             console.log(res.idLocation)
-                                            console.log(res.idcloudCode)
-
+                                            console.log(res.idCloudCode)
                                         }
 
                                     })
