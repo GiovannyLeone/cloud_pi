@@ -133,13 +133,16 @@ class Profile extends CloudCode
                 $ageProfile = $this->age;
                 $biographyProfile = $this->biographyProfile;
                 $idLocation = $this->idLocation;
+                
 
                 $existUser = $consultUser->fetch(PDO::FETCH_ASSOC);
                 $idUser = (int) $existUser['id_user'];
 
                 $resArray['idLocation'] = $idLocation;
                 if ($nameProfile && $ageProfile && $biographyProfile && $idLocation && $idUser) {
-                    $idCloudCode = $this->reqIdCloudCode();
+                    $idCloudCode = (int) $this->reqIdCloudCode();
+                    $idImage     = (int) $this->reqIdMedia();
+                    
 
                     $consultIdCloudCode = $conn->prepare("SELECT id_cloud_code FROM tb_cloud_code WHERE id_cloud_code = :idCloudCode LIMIT 1");
                     $consultIdCloudCode->bindParam(':idCloudCode', $idCloudCode, PDO::PARAM_STR);
@@ -149,7 +152,7 @@ class Profile extends CloudCode
                     $idCloudCode = (int) $existCloudCode['id_cloud_code'];
 
                     if ($idCloudCode) {
-                        $insertProfile = $conn->prepare("INSERT INTO tb_cloud_code (cloud_code, name, age, biography_profile, id_location, id_image, id_user) 
+                        $insertProfile = $conn->prepare("INSERT INTO tb_profile (id_cloud_code, name, age, biography_profile, id_location, id_image, id_user) 
                         VALUES(
                         :cloudCode,
                         :nameProfile,
@@ -159,7 +162,7 @@ class Profile extends CloudCode
                         :idImage,
                         :idUser
                         )");
-                        $insertProfile->bindParam(':cloudCode', $cloudCode, PDO::PARAM_STR);
+                        $insertProfile->bindParam(':cloudCode', $idCloudCode, PDO::PARAM_INT);
                         $insertProfile->bindParam(':nameProfile', $nameProfile, PDO::PARAM_STR);
                         $insertProfile->bindParam(':ageProfile', $ageProfile, PDO::PARAM_INT);
                         $insertProfile->bindParam(':bioProfile', $biographyProfile, PDO::PARAM_STR);

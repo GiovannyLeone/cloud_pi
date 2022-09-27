@@ -151,14 +151,24 @@ setTimeout(() => {
                                 preConfirm: () => {
                                     let imageProfile = $('#imageProfile').val()
                                     const pathImage = imageProfile.split('\\')[2]
-                                    if (pathImage.split('.')[1] === "png") {
-                                        console.log(pathImage);
-                                        return { pathImage: pathImage }
+                                    const extensionImg = pathImage.split('.')[1]
+                                    if (extensionImg === "png" && extensionImg === "jpeg" && extensionImg === "jpg") {
+                                        extensionImg = 1
+                                    } else if (extensionImg === "jpeg"){
+                                        extensionImg = 2
+                                    } else if (extensionImg === "jpg"){
+                                        extensionImg = 3
                                     }
+
+                                    console.log(pathImage);
+                                    return { pathImage: pathImage,
+                                             extensionImg: extensionImg }
 
                                 }
                             }).then((res) => {
                                 var pathImage = res.value.pathImage
+                                var alternativeImage = "profile/"
+                                var extensionImg = res.value.extensionImg
                                 let urlResgister = baseURL + 'mvc/model/profile-login.php'
 
                                 const dataProfile = {
@@ -168,7 +178,9 @@ setTimeout(() => {
                                     biographyProfile: `${ biographyProfile }`,
                                     idCountry: CountryProfile,
                                     idState: StateProfile,
-                                    pathImage: `profile/${ pathImage }`,
+                                    pathImage: `${ pathImage }`,
+                                    alternativeImage: `${ alternativeImage }`,
+                                    extensionImg: `${ extensionImg }`,
                                     keyIdentityUser: `${ requestUser.identityUser }`
                                 }
                                 $.ajax({

@@ -4,6 +4,15 @@ include_once('../controller/class/class.user.php');
 include_once('../controller/class/class.cloudcode.php');
 
 $cloudCode = $_POST['codeCloud'];
+$profileName = $_POST['profileName'];
+$profileAge = $_POST['profileAge'];
+$biographyProfile = $_POST['biographyProfile'];
+$idCountry = $_POST['idCountry'];
+$idState = $_POST['idState'];
+$pathImage = $_POST['pathImage'];
+$extensionImg = $_POST['extensionImg'];
+$alternativeImage = $_POST['alternativeImage'];
+$keyHashUser = $_POST['keyIdentityUser'];
 
 // Cloud Code
 
@@ -12,14 +21,12 @@ $classCloudCode = new CloudCode;
 $classCloudCode->setCloudCode($cloudCode);
 $classCloudCode->registerCloudCode();
 
+$classMedia = new Media;
+$classMedia->setPathImage($pathImage);
+$classMedia->setAlternativeImage($alternativeImage);
+$classMedia->setIdTypeImage($extensionImg);
+$classMedia->addMedia();
 
-$profileName = $_POST['profileName'];
-$profileAge = $_POST['profileAge'];
-$biographyProfile = $_POST['biographyProfile'];
-$idCountry = $_POST['idCountry'];
-$idState = $_POST['idState'];
-$pathImage = $_POST['pathImage'];
-$keyHashUser = $_POST['keyIdentityUser'];
 
 $profile = new profile;
 $profile->setCloudCode($cloudCode);
