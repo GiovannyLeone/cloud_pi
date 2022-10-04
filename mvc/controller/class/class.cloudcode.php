@@ -66,7 +66,7 @@ class CloudCode extends Media
     {
         require '../db/connect.php';
         $resArray = [];
-        $cloudCode = strtolower($this->cloudCode);
+        $cloudCode = strtolower("$this->cloudCode");
         $idStatus = 2;
         if (isset($cloudCode) && isset($idStatus)) {
             $consultCloudCode = $conn->prepare("SELECT * FROM tb_cloud_code WHERE cloud_code = :cloudCode AND id_status = :idStatus LIMIT 1");

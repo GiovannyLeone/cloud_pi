@@ -113,6 +113,7 @@ class Profile extends CloudCode
         return $this->idUser;
     }
 
+
     public function registerProfile(string $keyHashUser)
     {
         require '../db/connect.php';

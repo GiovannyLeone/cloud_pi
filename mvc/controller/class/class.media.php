@@ -57,13 +57,13 @@ class Media
             $pathImage          = (string) $this->pathImage;
             $alternativeImage   = (string) $this->alternativeImage;
             $idTypeImage        = (int)    $this->idTypeImage;
-            $idStatus           = (int) 2;
+            $idStatus           = (int)    2;
 
             if (isset($pathImage) && isset($alternativeImage) && isset($idTypeImage) && isset($idStatus)) {
 
-                if ($alternativeImage === 'profile/') {
+                if ($alternativeImage === "profile/") {
                     $alternativeImage = 'Profile Photo';
-                } else if ($alternativeImage === 'posts/') {
+                } else if ($alternativeImage === "posts/") {
                     $alternativeImage = 'Publication';
                 } else{
                     $alternativeImage = '';
@@ -75,7 +75,7 @@ class Media
                     :pathImage,
                     :alternativeImage,
                     :idTypeImage,
-                    :idStatus,
+                    :idStatus
                     )");
                 $insertMedia->bindParam(':pathImage', $pathImage, PDO::PARAM_STR);
                 $insertMedia->bindParam(':alternativeImage', $alternativeImage, PDO::PARAM_STR);
@@ -95,8 +95,8 @@ class Media
         $resArray = [];
         $pathImage          = (string) $this->pathImage;
         $alternativeImage   = (string) $this->alternativeImage;
-        $idTypeImage        = (int) $this->idTypeImage;
-        $idStatus           = (int) 2;
+        $idTypeImage        = (int)    $this->idTypeImage;
+        $idStatus           = (int)    2;
         if ( isset($pathImage) && isset($alternativeImage) && isset($idTypeImage) ) {
             $consultMedia = $conn->prepare("SELECT * FROM tb_image WHERE path_image = :pathImage AND
             alternative_image = :alternativeImage AND id_type_image  = :idTypeImage AND id_status = idStatus LIMIT 1");

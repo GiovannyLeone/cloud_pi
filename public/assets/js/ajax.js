@@ -2,6 +2,8 @@ var baseURL = "http://localhost/cloud_pi/"
 
 $("#btnSetUsers").click((e) => {
     e.preventDefault()
+    $("#btnSetUsers").prop('disabled', true);
+
 
     //Criando Obj com dados do form
     let dataForm = {
@@ -13,12 +15,15 @@ $("#btnSetUsers").click((e) => {
     // Validando Campos do Form
     if (dataForm.setFormUsername.length < 2) {
         $('.msgError').text("Nome de Usuário invalido!").show()
+        $("#btnSetUsers").prop('disabled', false);
         return false
     } else if (dataForm.setFormEmail.length < 6) {
         $('.msgError').text("Email invalido!").show()
+        $("#btnSetUsers").prop('disabled', false);
         return false
     } else if (dataForm.setFormPassword.length < 5) {
         $('.msgError').text("Sua Senha deve ter 6 caracteres no minímo!").show()
+        $("#btnSetUsers").prop('disabled', false);
         return false
     }
     $(".msgError").hide()
@@ -37,13 +42,15 @@ $("#btnSetUsers").click((e) => {
             console.log(res);
             if (res.error !== undefined) {
                 $(".msgError").text(res.error).show()
+                $("#btnSetUsers").prop('disabled', false);
+
                 return false
             }
             if (res.redirect !== undefined) {
-                window.location = baseURL + res.redirect
                 const identityUser = res.identityUser
                 localStorage.removeItem('keyIdentityUser');
                 localStorage.setItem('keyIdentityUser', identityUser);
+                window.location = baseURL + res.redirect
 
             }
 
@@ -53,10 +60,7 @@ $("#btnSetUsers").click((e) => {
             console.log(e);
 
         })
-        // Sempre
-        .always(function ajaxSempre() {
-            console.log("sempre");
-        })
+
     return false
 
 })
@@ -115,6 +119,7 @@ $("#btnGetUsers").click((e) => {
                 const identityUser = res.identityUser
                 localStorage.removeItem('keyIdentityUser');
                 localStorage.setItem('keyIdentityUser', identityUser);
+                window.location = baseURL + res.redirect
             }
 
         })

@@ -152,23 +152,22 @@ setTimeout(() => {
                                     let imageProfile = $('#imageProfile').val()
                                     const pathImage = imageProfile.split('\\')[2]
                                     const extensionImg = pathImage.split('.')[1]
-                                    if (extensionImg === "png" && extensionImg === "jpeg" && extensionImg === "jpg") {
-                                        extensionImg = 1
-                                    } else if (extensionImg === "jpeg"){
-                                        extensionImg = 2
-                                    } else if (extensionImg === "jpg"){
-                                        extensionImg = 3
-                                    }
+                                    console.log(extensionImg);
 
-                                    console.log(pathImage);
-                                    return { pathImage: pathImage,
-                                             extensionImg: extensionImg }
+                                    if (extensionImg == "PNG" || extensionImg == "png") {
+                                        return { pathImage: pathImage, extensionImg: 1 }
+                                    } else if (extensionImg == "jpeg"){
+                                        return { pathImage: pathImage, extensionImg: 2 }
+                                    } else if (extensionImg == "jpg"){
+                                        return { pathImage: pathImage, extensionImg: 3 }
+                                    }
 
                                 }
                             }).then((res) => {
                                 var pathImage = res.value.pathImage
                                 var alternativeImage = "profile/"
                                 var extensionImg = res.value.extensionImg
+                                console.log(extensionImg);
                                 let urlResgister = baseURL + 'mvc/model/profile-login.php'
 
                                 const dataProfile = {
