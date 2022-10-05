@@ -36,29 +36,62 @@ class User
         return $this->userEmail = $userEmail;
     }
 
-    public function getUserEmail(string $userEmail)
+    public function getUserEmail()
     {
         return $this->userEmail;
     }
 
-    public function setUserPassoword(string $userPassword)
+    public function setUserPassoword(string $userPassword, string $userEmail)
     {
-        return $this->userPassword = $userPassword;
+        $userPassword = md5($userPassword);
+        $md5Pass = md5($userEmail . $userPassword);
+        $userPassword = $md5Pass;
+        // Gera um Passowrod baseado em bcrypt
+        $custoPassword = '09';
+        $saltPassword = $userPassword;
+        $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
+        return $this->userPassword = $criptUserPassword;
+    }
+    public function setJustUserPassoword(string $userJustPassword)
+    {
+
+        return $this->userJustPassword = $userJustPassword;
     }
 
-    public function getUserPassword(string $userPassword)
+    public function getUserPassword()
     {
         return $this->userPassword;
     }
 
-    public function setHash(string $hash)
+    public function setHash(string $userPassword, string $userEmail)
     {
-        return $this->hash = $hash;
+        $userPassword = md5($userPassword);
+        $md5Pass = md5($userEmail . $userPassword);
+        $userPassword = $md5Pass;
+        // Gera um Passowrod baseado em bcrypt
+        $custoPassword = '09';
+        $saltPassword = $userPassword;
+        $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
+        // Gera um hash baseado em bcrypt
+        $custoHash = '06';
+        $saltHash = $md5Pass;
+        $newHash = crypt($criptUserPassword, '$2b$' . $custoHash . '$' . $saltHash . '$');
+        return $this->hash = $newHash;
     }
 
     public function getHash(string $hash)
     {
         return $this->hash;
+    }
+
+    public function setUpdateHash(string $updateHash)
+    {
+        return $this->updateHash = $updateHash;
+    }
+
+    public function getUpdateHash(string $updateHash)
+    {
+        return $this->updateHash;
     }
 
     public function setIdStatus(string $idStatus)
@@ -93,24 +126,10 @@ class User
                 $resArray['is_login'] = FALSE;
             } else {
                 // User não existe
-                # Colocar Hash para password
 
-                $userPassword = "$this->userPassword";
-                // Gerando md5 para encriptar
-                $userPassword = md5($userPassword);
-                $hash = md5($userEmail . $userPassword);
-                $userPassword = $hash;
-
-                // Gera um Passowrod baseado em bcrypt
-                $custoPassword = '09';
-                $saltPassword = $hash;
-                $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
-                
-                // Gera um hash baseado em bcrypt
-                $custoHash = '06';
-                $saltHash = $hash;
-                $newHash = crypt($criptUserPassword, '$2b$' . $custoHash . '$' . $saltHash . '$');
                 #Setando Status
+                $criptUserPassword = $this->userPassword;
+                $newHash = $this->hash;
                 $idStatus = (int) 2;
 
                 $newUser = $conn->prepare("INSERT INTO tb_user (username, user_email, user_password, hash, id_status) VALUES(:username, :user_email, :user_password, :hash, :id_status)");
@@ -146,8 +165,6 @@ class User
             $resArray = [];
             $username = $this->username;
             $userEmail = strtolower($this->userEmail);
-            $userPassword = $this->userPassword;
-            $userPassword = md5($userPassword);
 
 
 
@@ -160,27 +177,21 @@ class User
 
             if ($consultSql->rowCount() == 1) {
                 // User já cadastradado
-                $existUser = $consultSql->fetch(PDO::FETCH_ASSOC);
-                $userEmail = (string) $existUser['user_email'];
+                $existUser = $consultSql->fetch(PDO::FETCH_OBJ);
+                $userEmail = (string) $existUser->user_email;
 
 
                 // Var de sessão
-                $idUserDB = (int) $existUser['id_user'];
-                $loginUserDB = (string) $existUser['username'];
-                $loginPassword = (string) $existUser['user_password'];
-                $identityUser = (string) $existUser['hash'];
-
-                $hash = md5($userEmail . $userPassword);
-                $userPassword = $hash;
-
-                // Gera um Passowrod baseado em bcrypt para logar
-                $custoPassword = '09';
-                $saltPassword = $hash;
-                $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
+                $idUserDB       = (int) $existUser->id_user;
+                $loginUserDB    = (string) $existUser->username;
+                $loginUserEmail = (string) $existUser->user_email;
+                $loginPassword  = (string) $existUser->user_password;
+                $identityUser   = (string) $existUser->hash;
+                $criptUserPassword = $this->setUserPassoword($this->userJustPassword, $loginUserEmail);
 
                 // Encripty Pass
                 # if her
-                if ($criptUserPassword == $existUser['user_password']) {
+                if ($criptUserPassword == $existUser->user_password) {
                     setcookie("idUser", $idUserDB);
                     setcookie("loginUser", $loginUserDB);
                     setcookie("loginPassword", $loginPassword);
@@ -231,8 +242,8 @@ class User
                 $baseURL = "http://";
                 $baseURL .= "localhost/cloud_pi";
 
-                $existUser = $consultSql->fetch(PDO::FETCH_ASSOC);
-                $hash = (string) $existUser['hash']; //Pegando a hash da consulta do DB
+                $existUser = $consultSql->fetch(PDO::FETCH_OBJ);
+                $hash = (string) $existUser->hash; //Pegando a hash da consulta do DB
 
                 $urlRecovery = $baseURL . "/recovery-password?idRec=" . $hash;
 
@@ -248,7 +259,7 @@ class User
             echo json_encode($resArray);
         } else {
             exit("Fora!");
-        }      
+        }
     }
 
     public function updatePasswordUser()
@@ -260,7 +271,7 @@ class User
             $username = $this->username;
             $userEmail = strtolower($this->userEmail);
             $userPassword = $this->userPassword;
-            $userHash = $this->hash;
+            $userHash = $this->updateHash;
             $idStatus = (int) 2;
 
             // Verificando se User Existe
@@ -278,30 +289,14 @@ class User
                 $baseURL = "http://";
                 $baseURL .= "localhost/cloud_pi";
 
-                $existUser = $consultSql->fetch(PDO::FETCH_ASSOC);
-                $UsernameSession = (string) $existUser['username'];
-                $userEmailSession = (string) $existUser['user_email'];
+                $existUser = $consultSql->fetch(PDO::FETCH_OBJ);
+                $UsernameSession = (string) $existUser->username;
+                $userEmailSession = (string) $existUser->user_email;
 
                 $userPassword = $this->userPassword;
                 $userEmail = strtolower($this->userEmail);
-
-
-
-                $userPassword = md5($userPassword);
-                $hash = md5($userEmail . $userPassword);
-                $userPassword = $hash;
-
-                // Gera um Passowrod baseado em bcrypt
-                $custoPassword = '09';
-                $saltPassword = $hash;
-                $criptUserPassword = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
-
-            
-
-                // Gera um hash baseado em bcrypt
-                $custoHash = '06';
-                $saltHash = $hash;
-                $newHash = crypt($criptUserPassword, '$2b$' . $custoHash . '$' . $saltHash . '$');               
+                $criptUserPassword = $this->userPassword;
+                $newHash = $this->hash;
 
                 $updatePasswordUser = $conn->prepare("UPDATE tb_user SET
                 user_password = :criptUserPassword,
@@ -317,9 +312,6 @@ class User
             }
             echo json_encode($resArray);
         } else {
-
         }
-           
     }
-
 }

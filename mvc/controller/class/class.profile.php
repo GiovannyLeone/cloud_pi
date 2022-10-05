@@ -46,13 +46,13 @@ class Profile extends CloudCode
     public function setIdLocation(int $idCountry, int $idState)
     {
 
-        if ( $idCountry === 1) {
+        if ( $idCountry === 1 ) {
             // Brasil
-            if ( $idState === 1) {
+            if ( $idState === 1 ) {
                 $idLocation = (int) 1;
                 return $this->idLocation = $idLocation;
 
-            } else if ($idState === 2) {
+            } else if ($idState === 2 ) {
                 $idLocation = (int) 2;
                 return $this->idLocation = $idLocation;
 
@@ -76,11 +76,11 @@ class Profile extends CloudCode
             
         } else if ( $idCountry === 3 ) {
             // EUA
-            if ( $idState === 1) {
+            if ( $idState === 1 ) {
                 $idLocation = (int) 5;
                 return $this->idLocation = $idLocation;
 
-            } else if ($idState === 2) {
+            } else if ($idState === 2 ) {
                 $idLocation = (int) 6;
                 return $this->idLocation = $idLocation;
             }
@@ -113,6 +113,46 @@ class Profile extends CloudCode
         return $this->idUser;
     }
 
+    public function setPathImage(string $pathImage)
+    {
+        return $this->pathImage = $pathImage;
+    }
+
+    public function getPathImage(string $pathImage)
+    {
+        return $this->pathImage;
+    }
+
+    public function setAlternativeImage(string $alternativeImage)
+    {
+        if ($alternativeImage === "profile/") {
+            $alternativeImage = 'Profile Photo';
+            return $this->alternativeImage = $alternativeImage;
+        } else if ($alternativeImage === "posts/") {
+            $alternativeImage = 'Publication';
+            return $this->alternativeImage = $alternativeImage;
+
+        } else{
+            $alternativeImage = '';
+            return $this->alternativeImage = $alternativeImage;
+        }
+    }
+
+    public function getAlternativeImage(string $alternativeImage)
+    {
+        return $this->alternativeImage;
+    }
+
+    public function setIdTypeImage(int $idTypeImage)
+    {
+        return $this->idTypeImage = $idTypeImage;
+    }
+
+    public function getIdTypeImage(int $idTypeImage)
+    {
+        return $this->idTypeImage;
+    }
+
 
     public function registerProfile(string $keyHashUser)
     {
@@ -136,21 +176,26 @@ class Profile extends CloudCode
                 $idLocation = $this->idLocation;
                 
 
-                $existUser = $consultUser->fetch(PDO::FETCH_ASSOC);
-                $idUser = (int) $existUser['id_user'];
+                $existUser = $consultUser->fetch(PDO::FETCH_OBJ);
+                $idUser = (int) $existUser->id_user;
 
                 $resArray['idLocation'] = $idLocation;
                 if ($nameProfile && $ageProfile && $biographyProfile && $idLocation && $idUser) {
+                    
                     $idCloudCode = (int) $this->reqIdCloudCode();
-                    $idImage     = (int) $this->reqIdMedia();
+
+                    $pathImage          = (string) $this->pathImage;
+                    $alternativeImage   = (string) $this->alternativeImage;
+                    $idTypeImage        = (int)    $this->idTypeImage;
+                    $idImage            = (int) $this->reqIdMedia($pathImage, $alternativeImage, $idTypeImage);
                     
 
                     $consultIdCloudCode = $conn->prepare("SELECT id_cloud_code FROM tb_cloud_code WHERE id_cloud_code = :idCloudCode LIMIT 1");
                     $consultIdCloudCode->bindParam(':idCloudCode', $idCloudCode, PDO::PARAM_STR);
                     $consultIdCloudCode->execute();
 
-                    $existCloudCode = $consultIdCloudCode->fetch(PDO::FETCH_ASSOC);
-                    $idCloudCode = (int) $existCloudCode['id_cloud_code'];
+                    $existCloudCode = $consultIdCloudCode->fetch(PDO::FETCH_OBJ);
+                    $idCloudCode = (int) $existCloudCode->id_cloud_code;
 
                     if ($idCloudCode) {
                         $insertProfile = $conn->prepare("INSERT INTO tb_profile (id_cloud_code, name, age, biography_profile, id_location, id_image, id_user) 
