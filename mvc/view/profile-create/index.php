@@ -4,7 +4,18 @@ $baseURL = "http://localhost/cloud_pi/public/";
 
 ?><!DOCTYPE html>
 <?php include_once("profile-head.php")?>
-<body></body>
+<body><div class="wrapper">                    <section>
+                        <span class="starts"></span>
+                        <span class="starts"></span>
+                        <span class="starts"></span>
+                        <span class="starts"></span>
+                        <span class="starts"></span>
+                        <span class="starts"></span>
+                        <span class="starts"></span>
+                        <span class="starts"></span>
+                        <span class="starts"></span>
+                        <span class="starts"></span>
+                    </section></body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="<?=$baseURL?>assets/js/scripts.js"></script>
