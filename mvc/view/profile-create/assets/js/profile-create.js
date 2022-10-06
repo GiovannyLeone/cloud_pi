@@ -5,16 +5,20 @@ var baseURL = "http://localhost/cloud_pi/"
 console.log(requestUser.identityUser);
 
 // console.log(identityUser);
+    
 
 setTimeout(() => {
     swal.fire({
         title: 'Qual será seu código de identificação "@"',
         icon: 'question',
         confirmButtonText: "Confirmar",
-        html: `<input type="text" id="codeCloud" placeholder="@">`,
+        html: `<input type="text" id="codeCloud" placeholder="@identificação">`,
         focusConfirm: false,
         preConfirm: () => {
             const codeCloud = Swal.getPopup().querySelector('#codeCloud').value
+            codeCloud.toLowerCase()
+            codeCloud.replace(/[^a-zA-Z\s]/g, "")
+            console.log(codeCloud);
             if (!codeCloud) {
                 Swal.showValidationMessage(`Código Cloud invalido 😓`)
             }
@@ -32,6 +36,8 @@ setTimeout(() => {
                 const profileName = Swal.getPopup().querySelector('#profileName').value
                 if (!profileName) {
                     Swal.showValidationMessage(`Nome invalido 😓`)
+                } else if (profileName !== '[a-zA-Z0-9]') {
+                    Swal.showValidationMessage(`seu Código Cloud deve conter números e letras 😓`)
                 }
                 return { profileName: profileName }
             }
@@ -61,7 +67,7 @@ setTimeout(() => {
                     title: 'Gostaria de contar um pouco da sua história...',
                     icon: 'question',
                     confirmButtonText: "Confirmar",
-                    html: `<textarea rows="10" cols="50" id="biographyProfile" placeholder="Escreva sobre você..."></textarea>`,
+                    html: `<textarea rows="10" cols="50" id="biographyProfile" maxlength="100" placeholder="Escreva sobre você..."></textarea>`,
                     focusConfirm: false,
                     showCancelButton: true,
                     preConfirm: () => {
