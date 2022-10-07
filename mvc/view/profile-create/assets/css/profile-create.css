@@ -10,146 +10,28 @@
     box-sizing: border-box;
 }
 
+#biographyProfile{
+    resize: none;
+    border:  2px solid var(--royalBlueHover);
+    padding: 5px;
+}
+#biographyProfile:focus{
+    border:  2px solid var(--royalBlueHover);
+    box-shadow: 0 0 0 0 ;
+    outline:none;
+}
+
+body {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
 
  .wrapper {
     width: 100vw;
     height: 100vh;
     background: linear-gradient(0, #120c56, #000000);
 }
-/*
-.stars{
-	width: 3px;
-	height: 3px;
-	border-radius: 50%;
-	animation: anim-stars 20s linear infinite;
-}
-
-.stars{
-	width: 3px;
-	height: 3px;
-	border-radius: 50%;
-	box-shadow: 50px 30px white,
-    100px 500px white,
-    120px 480px white,
-    140px 460px white,
-    80px 620px white,
-    300px 420px white,
-    250px 630px white,
-    200px 750px white,
-    150px 600px white,
-    320px 680px white,
-    550px 300px white,
-    850px 300px white,
-    950px 700px white,
-    1150px 160px white,
-    1150px 100px white,
-    1110px 200px white,
-    1120px 250px white,
-    1140px 320px white,
-    1270px 450px white,
-    1380px 510px white,
-    1450px 620px white,
-    1150px 900px white,
-    1250px 600px white,
-    1350px 700px white,
-    1350px 750px white,
-    1450px 930px white,
-    1550px 100px white,
-    1500px 120px white,
-    1530px 130px white,
-    1630px 510px white,
-    1530px 530px white,
-    1330px 560px white,
-    1330px 580px white,
-    1730px 500px white,
-    1730px 730px white,
-    1730px 0px white,
-    1730px 130px white,
-    1730px 230px white,
-    1730px 230px white,
-    1630px 600px white,
-    1700px 700px white,
-    1730px 900px white,
-    1720px 930px white,
-    100px 730px white,
-    400px 230px white,
-    420px 310px white,
-    650px 630px white,
-    710px 130px white,
-    750px 200px white;
-}
-
-.stars::after{
-    content: " ";
-	width: 3px;
-	height: 3px;
-	border-radius: 50%;
-	box-shadow: 50px 30px white,
-    100px 500px white,
-    120px 480px white,
-    140px 460px white,
-    80px 620px white,
-    300px 420px white,
-    250px 630px white,
-    200px 750px white,
-    150px 600px white,
-    320px 680px white,
-    550px 300px white,
-    850px 300px white,
-    950px 700px white,
-    1150px 160px white,
-    1150px 100px white,
-    1110px 200px white,
-    1120px 250px white,
-    1140px 320px white,
-    1270px 450px white,
-    1380px 510px white,
-    1450px 620px white,
-    1150px 900px white,
-    1250px 600px white,
-    1350px 700px white,
-    1350px 750px white,
-    1450px 930px white,
-    1550px 100px white,
-    1500px 120px white,
-    1530px 130px white,
-    1630px 510px white,
-    1530px 530px white,
-    1330px 560px white,
-    1330px 580px white,
-    1730px 500px white,
-    1730px 730px white,
-    1730px 0px white,
-    1730px 130px white,
-    1730px 230px white,
-    1730px 230px white,
-    1630px 600px white,
-    1700px 700px white,
-    1730px 900px white,
-    1720px 930px white,
-    100px 730px white,
-    400px 230px white,
-    420px 310px white,
-    650px 630px white,
-    710px 130px white,
-    750px 200px white;
-}
-
-@keyframes anim-stars {
-    from {
-        transform: translateY(100vh);
-    }
-    to {
-        transform: translateY(-150vh);
-    }
-}
-
-.wrapper img {
-    height: 30vh;
-    padding: 10px;
-    object-fit: cover;
-} */
-
 
 .starts {
     position: absolute;
@@ -380,8 +262,6 @@
     animation-delay: 2.75s;
     animation-duration: 4s;
 }
-
-
 
 input {
     border-bottom: 2px solid var(--royalBlueHover);

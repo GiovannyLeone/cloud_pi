@@ -4,29 +4,39 @@ const requestUser = {
 var baseURL = "http://localhost/cloud_pi/"
 console.log(requestUser.identityUser);
 
-// console.log(identityUser);
-    
+// console.log(identityUser);    
 
 setTimeout(() => {
     swal.fire({
+        toast: true,
         title: 'Qual será seu código de identificação "@"',
         icon: 'question',
+
         confirmButtonText: "Confirmar",
         html: `<input type="text" id="codeCloud" placeholder="@identificação">`,
         focusConfirm: false,
         preConfirm: () => {
+            
             const codeCloud = Swal.getPopup().querySelector('#codeCloud').value
             codeCloud.toLowerCase()
-            codeCloud.replace(/[^a-zA-Z\s]/g, "")
             console.log(codeCloud);
+            let pattern = '[a-z-0-9]'
+
             if (!codeCloud) {
                 Swal.showValidationMessage(`Código Cloud invalido 😓`)
+            }
+            if (codeCloud.length < 3) {
+                Swal.showValidationMessage(`Identificação muito curta! 🤔`)
+            }
+            if (!codeCloud.match(pattern)) {
+                Swal.showValidationMessage(`Não insira Caracteres especiais, nem letras maiúsculas!`)
             }
             return { codeCloud: codeCloud }
         }
     }).then((res) => {
         var codeCloud = res.value.codeCloud
         swal.fire({
+            toast: true,
             title: 'Qual será seu nome de exibição em seu perfil?',
             icon: 'question',
             confirmButtonText: "Confirmar",
@@ -34,16 +44,23 @@ setTimeout(() => {
             focusConfirm: false,
             preConfirm: () => {
                 const profileName = Swal.getPopup().querySelector('#profileName').value
+                let pattern = '[a-zA-Z0-9]'
+
                 if (!profileName) {
                     Swal.showValidationMessage(`Nome invalido 😓`)
-                } else if (profileName !== '[a-zA-Z0-9]') {
-                    Swal.showValidationMessage(`seu Código Cloud deve conter números e letras 😓`)
+                }
+                if (profileName.length < 3) {
+                    Swal.showValidationMessage(`Nome de exibição muito curto! 🤔`)
+                } 
+                if (!profileName.match(pattern)) {
+                    Swal.showValidationMessage(`Não insira Caracteres especiais!`)
                 }
                 return { profileName: profileName }
             }
         }).then((res) => {
             var profileName = res.value.profileName
             Swal.fire({
+                toast: true,
                 title: 'How old are you?',
                 icon: 'question',
                 input: 'range',
@@ -64,14 +81,22 @@ setTimeout(() => {
             }).then((res) => {
                 var profileAge = res.value.profileAge
                 swal.fire({
+                    toast: true,
+                    width: 500,
                     title: 'Gostaria de contar um pouco da sua história...',
                     icon: 'question',
                     confirmButtonText: "Confirmar",
-                    html: `<textarea rows="10" cols="50" id="biographyProfile" maxlength="100" placeholder="Escreva sobre você..."></textarea>`,
+                    html: `<textarea rows="10" cols="42" id="biographyProfile" maxlength="100" placeholder="Escreva sobre você..."></textarea>`,
                     focusConfirm: false,
                     showCancelButton: true,
                     preConfirm: () => {
                         const biographyProfile = Swal.getPopup().querySelector('#biographyProfile').value
+                        let pattern = '[a-zA-Z0-9]'
+
+                        if (!biographyProfile.match(pattern)) {
+                            Swal.showValidationMessage(`Não insira Caracteres especiais!`)
+                        }
+
                         return { biographyProfile: biographyProfile }
                     }
 
@@ -79,6 +104,7 @@ setTimeout(() => {
                     var biographyProfile = res.value.biographyProfile
 
                     swal.fire({
+                        toast: true,
                         title: 'Seu país?...',
                         icon: 'question',
                         confirmButtonText: "Confirmar",
@@ -100,6 +126,7 @@ setTimeout(() => {
                     }).then((res) => {
                         var CountryProfile = res.value.CountryProfile
                         swal.fire({
+                            toast: true,
                             title: 'seu estado?...',
                             icon: 'question',
                             confirmButtonText: "Confirmar",
@@ -148,6 +175,7 @@ setTimeout(() => {
                             var StateProfile = res.value.StateProfile
 
                             Swal.fire({
+                                toast: true,
                                 title: 'Queremos te ver! Adicione uma foto',
                                 icon: 'question',
                                 confirmButtonText: "Confirmar",
@@ -249,3 +277,4 @@ setTimeout(() => {
     })
 
 }, "100")
+
