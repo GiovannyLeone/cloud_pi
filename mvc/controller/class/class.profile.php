@@ -160,7 +160,7 @@ class Profile extends CloudCode
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
-            $resArray = [];
+            $resArray = (object) [];
 
             $keyHash = $keyHashUser;
 
@@ -191,7 +191,7 @@ class Profile extends CloudCode
                     
 
                     $consultIdCloudCode = $conn->prepare("SELECT id_cloud_code FROM tb_cloud_code WHERE id_cloud_code = :idCloudCode LIMIT 1");
-                    $consultIdCloudCode->bindParam(':idCloudCode', $idCloudCode, PDO::PARAM_STR);
+                    $consultIdCloudCode->bindParam(':idCloudCode', $idCloudCode, PDO::PARAM_INT);
                     $consultIdCloudCode->execute();
 
                     $existCloudCode = $consultIdCloudCode->fetch(PDO::FETCH_OBJ);
@@ -208,7 +208,7 @@ class Profile extends CloudCode
                         :idImage,
                         :idUser
                         )");
-                        $insertProfile->bindParam(':cloudCode', $idCloudCode, PDO::PARAM_INT);
+                        $insertProfile->bindParam(':cloudCode', $idCloudCode, PDO::PARAM_STR);
                         $insertProfile->bindParam(':nameProfile', $nameProfile, PDO::PARAM_STR);
                         $insertProfile->bindParam(':ageProfile', $ageProfile, PDO::PARAM_INT);
                         $insertProfile->bindParam(':bioProfile', $biographyProfile, PDO::PARAM_STR);
@@ -216,6 +216,7 @@ class Profile extends CloudCode
                         $insertProfile->bindParam(':idImage', $idImage, PDO::PARAM_INT);
                         $insertProfile->bindParam(':idUser', $idUser, PDO::PARAM_INT);
                         $insertProfile->execute();
+                        $resArray->redirect = TRUE;
                     }
                 }
             } else {

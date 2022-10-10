@@ -1,6 +1,8 @@
 <?php
+header("Content-type: application/json; charset=utf8");
 include_once('../controller/class/class.user.php');
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
 $username = $_POST['getFormUsername'];
 $userPassword = $_POST['getFormPassword'];
 $users = new User;

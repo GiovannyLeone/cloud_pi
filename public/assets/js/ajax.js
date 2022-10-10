@@ -12,6 +12,8 @@ $("#btnSetUsers").click((e) => {
         setFormPassword: $('#setFormPassword').val()
     }
 
+    const dataJson = JSON.stringify(dataForm)
+
     // Validando Campos do Form
     if (dataForm.setFormUsername.length < 2) {
         $('.msgError').text("Nome de Usuário invalido!").show()
@@ -33,7 +35,7 @@ $("#btnSetUsers").click((e) => {
     $.ajax({
             url: urlResgister,
             type: 'POST',
-            data: dataForm,
+            data: dataJson,
             dataType: 'json',
             async: true
         })
@@ -50,6 +52,7 @@ $("#btnSetUsers").click((e) => {
                 const identityUser = res.identityUser
                 localStorage.removeItem('keyIdentityUser');
                 localStorage.setItem('keyIdentityUser', identityUser);
+                console.log(res);
                 window.location = baseURL + res.redirect
 
             }
@@ -65,7 +68,6 @@ $("#btnSetUsers").click((e) => {
 
 })
 
-
 $("#btnGetUsers").click((e) => {
     e.preventDefault()
 
@@ -74,6 +76,7 @@ $("#btnGetUsers").click((e) => {
         getFormUsername: $('#getFormUsername').val(),
         getFormPassword: $('#getFormPassword').val()
     }
+    const dataJson = JSON.stringify(dataForm)
 
     // Validando Campos do Form
     if (dataForm.getFormUsername.length < 2 && dataForm.getFormUsername.length < 2) {
@@ -94,7 +97,7 @@ $("#btnGetUsers").click((e) => {
     $.ajax({
             url: urlLogin,
             type: 'POST',
-            data: dataForm,
+            data: dataJson,
             dataType: 'json',
             async: true
         })
@@ -136,7 +139,6 @@ $("#btnGetUsers").click((e) => {
 
 })
 
-
 $("#forgetPass").click((e) => {
     e.preventDefault()
 
@@ -145,6 +147,8 @@ $("#forgetPass").click((e) => {
         getForgetFormEmail: $('#forgetEmail').val(),
         getForgetFormUsername: $('#forgetUsername').val()
     }
+
+    const dataJson = JSON.stringify(dataForgetForm)
 
     // Validando Campos do Form
     if (dataForgetForm.getForgetFormEmail.length < 2 || dataForgetForm.getForgetFormUsername.length < 2) {
@@ -166,7 +170,7 @@ $("#forgetPass").click((e) => {
     $.ajax({
             url: url_php,
             type: 'POST',
-            data: dataForgetForm,
+            data: dataJson,
             dataType: 'json',
             async: true
         })
@@ -226,7 +230,6 @@ $("#forgetPass").click((e) => {
     return false
 })
 
-
 $("#updatePass").click((e) => {
     e.preventDefault()
 
@@ -238,6 +241,8 @@ $("#updatePass").click((e) => {
         updatePassUserConf: $('#updatePassUserConf').val(),
         updateHashUser: $('#idRec').val()
     }
+
+    const dataJson = JSON.stringify(dataUpdateForm)
 
     // Validando Campos do Form
     if (dataUpdateForm.updateEmailUser.length < 2 || dataUpdateForm.updateLoginUser.length < 2 ||
@@ -262,7 +267,7 @@ $("#updatePass").click((e) => {
         $.ajax({
                 url: url_php,
                 type: 'POST',
-                data: dataUpdateForm,
+                data: dataJson,
                 dataType: 'json',
                 async: true
             })
@@ -274,6 +279,7 @@ $("#updatePass").click((e) => {
                     return false
                 }
                 if (res.redirect !== undefined) {
+                    localStorage.removeItem('keyIdentityUser');
                     Swal.fire({
                         title: 'Senha alterada! 😁',
                         html: 'Sua senha foi redefinida com sucesso! <br> Redirecionamento em: <b></b> ',
@@ -317,8 +323,88 @@ $("#updatePass").click((e) => {
     }
 })
 
-// Ajax Profile
+$("#deleteUser").click((e) => {
+    e.preventDefault()
 
+    swal.fire({
+        title: 'Você tem certeza que deseja excluir sua conta? Essa ação é irreversível!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#767be4',
+        confirmButtonText: "Sim, quero excluir minha Conta!",
+        cancelButtonText: 'Não, quero manter minha conta!',
+        focusConfirm: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $("#deleteUser").prop("disabled", true)
+            $("#deleteUser").css('background', "#eee")
+            $("#deleteUser").css('color', "#00000099")
+            Swal.fire({
+                title: 'Sua conta foi excluída com sucesso! 😭',
+                html: 'Aguarde para ser redirecionado: <b></b> Até a próxima meu amigo! 🥺 <br /> Nós da equipe Cloud estamos sempre a sua disposição ⛅',
+                icon: 'success',
+                timer: 5000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+                    const b = Swal.getHtmlContainer().querySelector('b')
+                    timerInterval = setInterval(() => {
+                        b.textContent = Swal.getTimerLeft()
+                    }, 100)
+                },
+                willClose: () => {
+                    clearInterval(timerInterval)
+                }
+            })
+            setTimeout(() => {
+                const requestDelete = {
+                    getKeyDelete: localStorage.getItem('keyIdentityUser')
+                }
+                const dataJson = JSON.stringify(requestDelete)
+                    $(".msgRecoveryError").hide()
+                    let url_php = 'http://localhost/cloud_pi/mvc/model/delete-user.php'
+            
+                    $.ajax({
+                            url: url_php,
+                            type: 'POST',
+                            data: dataJson,
+                            dataType: 'json',
+                            async: true
+                        })
+                        // Success
+                        .done(function ajaxDone(res) {
+                            console.log(res);
+                            if (res.error !== undefined) {
+                                $(".msgError").text(res.error).show()
+                                return false
+                            }
+                            if (res.redirect !== undefined) {
+                                if (res.deleteData === true) {
+                                    localStorage.removeItem('keyIdentityUser');
+            
+                                    window.location = baseURL + res.redirect
+                                }
+            
+                            }
+            
+                        })
+                        // falha
+                        .fail(function ajaxError(e) {
+                            console.log(e);
+            
+                        })
+                        // Sempre
+                        .always(function ajaxSempre() {
+                            console.log("sempre");
+                        })
+            }, "5000")
+        }
+      })
+    return false
+})
+
+// Ajax Profile
 $("#teste").click((e) => {
     e.preventDefault()
 
@@ -327,7 +413,7 @@ $("#teste").click((e) => {
 
     $.ajax({
         url: url_php,
-        type: 'POST',
+        type: 'GET',
         dataType: 'json',
         async: true
     })

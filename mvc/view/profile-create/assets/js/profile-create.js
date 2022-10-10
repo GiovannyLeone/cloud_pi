@@ -6,7 +6,6 @@ console.log(requestUser.identityUser);
 
 // console.log(identityUser);    
 
-setTimeout(() => {
     swal.fire({
         toast: true,
         title: 'Qual será seu código de identificação "@"',
@@ -19,6 +18,7 @@ setTimeout(() => {
             
             const codeCloud = Swal.getPopup().querySelector('#codeCloud').value
             codeCloud.toLowerCase()
+            codeCloud.trim()
             console.log(codeCloud);
             let pattern = '[a-z-0-9]'
 
@@ -28,7 +28,10 @@ setTimeout(() => {
             if (codeCloud.length < 3) {
                 Swal.showValidationMessage(`Identificação muito curta! 🤔`)
             }
-            if (!codeCloud.match(pattern)) {
+            if (codeCloud.search( /\s/g ) != -1) {
+                Swal.showValidationMessage(`Não insira espaços em sua Identificação, Coloque "_" em seu lugar 🤔`)
+            }
+            if (!codeCloud.search( /[^a-z0-9]/i )) {
                 Swal.showValidationMessage(`Não insira Caracteres especiais, nem letras maiúsculas!`)
             }
             return { codeCloud: codeCloud }
@@ -203,6 +206,7 @@ setTimeout(() => {
                                 var extensionImg = res.value.extensionImg
                                 console.log(extensionImg);
                                 let urlResgister = baseURL + 'mvc/model/profile-login.php'
+                                
 
                                 const dataProfile = {
                                     codeCloud: `${ codeCloud }`,
@@ -216,27 +220,22 @@ setTimeout(() => {
                                     extensionImg: `${ extensionImg }`,
                                     keyIdentityUser: `${ requestUser.identityUser }`
                                 }
-                                $.ajax({
-                                    url: urlResgister,
-                                    type: 'POST',
-                                    data: dataProfile,
-                                    dataType: 'json',
-                                    async: true
-                                })
 
-                                // Success
-                                .done(function ajaxDone(res) {
+                                const dataJson = JSON.stringify(dataProfile)
+
+                                    $.ajax({
+                                        url: urlResgister,
+                                        type: 'POST',
+                                        data: dataJson,
+                                        dataType: 'json',
+                                        async: true
+                                    })
+                                    
+                                    // Success
+                                    .done(function ajaxDone(res) {
                                         console.log(res);
                                         if (res.error !== undefined) {
-                                            $('.msgError').text("Nome de Usuário ou senha invalidos!").show()
-                                            $(".msgError").text(res.error).show()
-                                            Swal.fire({
-                                                icon: 'error',
-                                                title: 'Oops...😥',
-                                                text: 'Algo deu errado',
-                                                confirmButtonColor: '#767be4',
-                                                confirmButtonText: 'Confirmar',
-                                            })
+                                            alert(res.error)
                                             return false
                                         }
                                         if (res.redirect !== undefined) {
@@ -244,21 +243,30 @@ setTimeout(() => {
                                             // window.location.href = urlResgister
                                             console.log(res.idLocation)
                                             console.log(res.idCloudCode)
-                                        }
+                                            console.log(res.redirect)
 
+                                            setTimeout(function(){ window.location = urlRedirect; }, "5000");
+
+
+
+                                            return false
+                                            
+                                        }
+                                        
                                     })
                                     // falha
                                     .fail(function ajaxError(e) {
                                         console.log(e);
-
+                                        
                                     })
                                     // Sempre
                                     .always(function ajaxSempre() {
                                         console.log("sempre");
                                     })
+                                })
 
-
-                                Swal.fire(`
+                                    
+/*                                 Swal.fire(`
                                     codeCloud: ${ codeCloud }
                                     Name: ${ profileName }
                                     Idade: ${ profileAge }
@@ -267,7 +275,7 @@ setTimeout(() => {
                                     Seu Estado: ${ StateProfile }
                                     Caminho Image: ${ pathImage }
                                     `.trim())
-                            })
+                            }) */
 
                         })
                     })
@@ -276,5 +284,7 @@ setTimeout(() => {
         })
     })
 
-}, "100")
+
+
+
 

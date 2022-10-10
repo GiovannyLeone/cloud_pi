@@ -14,28 +14,19 @@ class CloudCode extends Media
     {
         return $this->idCloudCode = $idCloudCode;
     }
-
-    public function getIdCloudCode(int $idCloudCode)
+    public function getIdCloudCode()
     {
         return $this->idCloudCode;
     }
+
     public function setCloudCode(string $cloudCode)
     {
-        return $this->cloudCode = $cloudCode;
+        return $this->cloudCode = strtolower(trim($cloudCode));
     }
 
-    public function getCloudCode(string $cloudCode)
+    public function getCloudCode()
     {
         return $this->cloudCode;
-    }
-    public function setIdStatus(int $idStatus)
-    {
-        return $this->idStatus = $idStatus;
-    }
-
-    public function getIdStatus(int $idStatus)
-    {
-        return $this->idStatus;
     }
 
     public function registerCloudCode()
@@ -66,7 +57,7 @@ class CloudCode extends Media
     {
         require '../db/connect.php';
         $resArray = [];
-        $cloudCode = strtolower($this->cloudCode);
+        $cloudCode = $this->cloudCode;
         $idStatus = 2;
         if (isset($cloudCode) && isset($idStatus)) {
             $consultCloudCode = $conn->prepare("SELECT * FROM tb_cloud_code WHERE cloud_code = :cloudCode AND id_status = :idStatus LIMIT 1");

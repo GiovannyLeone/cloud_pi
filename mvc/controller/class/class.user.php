@@ -110,20 +110,20 @@ class User
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
-            $resArray = [];
+            $resArray = (object) [];
             $username = $this->username;
             $userEmail = strtolower($this->userEmail);
 
             // Verificando se user existe
-            $consultSql = $conn->prepare("SELECT username FROM tb_user WHERE username = :username OR user_email = :user_email  LIMIT 1");
+            $consultSql = $conn->prepare("SELECT username FROM tb_user WHERE username = :username OR user_email = :userEmail  LIMIT 1");
             $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
-            $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
+            $consultSql->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
             $consultSql->execute();
 
             if ($consultSql->rowCount() == 1) {
                 // User já cadastradado
-                $resArray['error'] = "Email ou Nome de Usuário em uso";
-                $resArray['is_login'] = FALSE;
+                $resArray->error = "Email ou Nome de Usuário em uso";
+                $resArray->is_login = FALSE;
             } else {
                 // User não existe
 
@@ -132,21 +132,21 @@ class User
                 $newHash = $this->hash;
                 $idStatus = (int) 2;
 
-                $newUser = $conn->prepare("INSERT INTO tb_user (username, user_email, user_password, hash, id_status) VALUES(:username, :user_email, :user_password, :hash, :id_status)");
+                $newUser = $conn->prepare("INSERT INTO tb_user (username, user_email, user_password, hash, id_status) VALUES(:username, :userEmail, :userPassword, :hash, :idStatus)");
                 $newUser->bindParam(':username', $username, PDO::PARAM_STR);
-                $newUser->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
-                $newUser->bindParam(':user_password', $criptUserPassword, PDO::PARAM_STR);
+                $newUser->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
+                $newUser->bindParam(':userPassword', $criptUserPassword, PDO::PARAM_STR);
                 $newUser->bindParam(':hash', $newHash, PDO::PARAM_STR);
-                $newUser->bindParam(':id_status', $idStatus, PDO::PARAM_INT);
+                $newUser->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
                 $newUser->execute();
 
                 // Iniciando Sessão
                 session_start();
                 $_SESSION['identityUser'] = (string) $newHash;
                 // Mandado resposta para página de cadastrado, redirecionamento e bool
-                $resArray['redirect'] = 'mvc/view/profile-create/';
-                $resArray['identityUser'] = $_SESSION['identityUser'];
-                $resArray['is_login'] = TRUE;
+                $resArray->redirect = 'mvc/view/profile-create/';
+                $resArray->identityUser = $_SESSION['identityUser'];
+                $resArray->is_login = TRUE;
             }
 
             echo json_encode($resArray);
@@ -162,17 +162,19 @@ class User
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
-            $resArray = [];
-            $username = $this->username;
-            $userEmail = strtolower($this->userEmail);
+            $resArray = (object) [];
+            $username   = (string) $this->username;
+            $userEmail  = (string) strtolower($this->userEmail);
+            $idStatus   = (int) 2;
 
 
 
 
             // Verificando se user existe
-            $consultSql = $conn->prepare("SELECT * FROM tb_user WHERE username = :username OR user_email = :user_email LIMIT 1");
+            $consultSql = $conn->prepare("SELECT * FROM tb_user WHERE (username = :username OR user_email = :userEmail) AND id_status = :idStatus LIMIT 1");
             $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
-            $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
+            $consultSql->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
+            $consultSql->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
             $consultSql->execute();
 
             if ($consultSql->rowCount() == 1) {
@@ -203,13 +205,13 @@ class User
                     $_SESSION['loginPasswordSe'] = $loginPassword;
                     $_SESSION['identityUser'] = $identityUser;
 
-                    $resArray['redirect'] = 'public/feed';
-                    $resArray['identityUser'] = $_SESSION['identityUser'];
+                    $resArray->redirect = 'public/feed';
+                    $resArray->identityUser = $_SESSION['identityUser'];
                 } else {
-                    $resArray['error'] = "Os dados não são validos!";
+                    $resArray->error = "Os dados não são validos!";
                 }
             } else {
-                $resArray['error'] = "Conta não encontrada :(";
+                $resArray->error = "Conta não encontrada :(";
             }
 
             echo json_encode($resArray);
@@ -223,16 +225,16 @@ class User
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
-            $resArray = [];
+            $resArray = (object) [];
             $username = $this->username;
             $userEmail = strtolower($this->userEmail);
             $idStatus = 2;
 
             // Verificando se User Existe
-            $consultSql = $conn->prepare("SELECT username, user_email, hash, id_status FROM tb_user WHERE username = :username AND user_email = :user_email AND id_status = :id_status LIMIT 1");
+            $consultSql = $conn->prepare("SELECT username, user_email, hash, id_status FROM tb_user WHERE username = :username AND user_email = :userEmail AND id_status = :idStatus LIMIT 1");
             $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
-            $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
-            $consultSql->bindParam(':id_status', $idStatus, PDO::PARAM_INT);
+            $consultSql->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
+            $consultSql->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
             $consultSql->execute();
 
 
@@ -247,14 +249,14 @@ class User
 
                 $urlRecovery = $baseURL . "/recovery-password?idRec=" . $hash;
 
-                $resArray['username'] = $username;
-                $resArray['userEmail'] = $userEmail;
-                $resArray['urlHash'] = $urlRecovery;
-                $resArray['redirect'] = 'http://localhost/cloud_pi/mvc/view/recovery-pass';
-                $resArray['date'] = date('d/m/Y');
-                $resArray['time'] = date('H:i');
+                $resArray->username = $username;
+                $resArray->userEmail = $userEmail;
+                $resArray->urlHash = $urlRecovery;
+                $resArray->redirect = 'http://localhost/cloud_pi/mvc/view/recovery-pass';
+                $resArray->date = date('d/m/Y');
+                $resArray->time = date('H:i');
             } else {
-                $resArray['error'] = (string) "Conta não encontrada :(";
+                $resArray->error = (string) "Conta não encontrada :(";
             }
             echo json_encode($resArray);
         } else {
@@ -267,7 +269,7 @@ class User
         require('../db/connect.php');
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
-            $resArray = [];
+            $resArray = (object) [];
             $username = $this->username;
             $userEmail = strtolower($this->userEmail);
             $userPassword = $this->userPassword;
@@ -275,11 +277,11 @@ class User
             $idStatus = (int) 2;
 
             // Verificando se User Existe
-            $consultSql = $conn->prepare("SELECT username, user_email, hash, id_status FROM tb_user WHERE username = :username AND user_email = :user_email AND hash = :hash AND id_status = :id_status LIMIT 1");
+            $consultSql = $conn->prepare("SELECT username, user_email, hash, id_status FROM tb_user WHERE username = :username AND user_email = :userEmail AND hash = :hash AND id_status = :idStatus LIMIT 1");
             $consultSql->bindParam(':username', $username, PDO::PARAM_STR);
-            $consultSql->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
+            $consultSql->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
             $consultSql->bindParam(':hash', $userHash, PDO::PARAM_STR);
-            $consultSql->bindParam(':id_status', $idStatus, PDO::PARAM_INT);
+            $consultSql->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
             $consultSql->execute();
 
 
@@ -308,10 +310,48 @@ class User
                 $updatePasswordUser->bindParam(':newHash', $newHash, PDO::PARAM_STR);
                 $updatePasswordUser->execute();
 
-                $resArray['redirect'] = 'http://localhost/cloud_pi/public/';
+                $resArray->redirect = 'http://localhost/cloud_pi/public/';
             }
             echo json_encode($resArray);
         } else {
         }
+    }
+    public function deleteUser(string $getKeyDelete)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            require('../db/connect.php');
+            header("Content-Type: application/json");
+
+            $resArray = (object) [];
+            $idStatus = (int) 2;
+            
+            $consultUser = $conn->prepare("SELECT `id_user`, `hash`, `id_status` FROM tb_user WHERE `hash` = :getKeyDelete AND  `id_status` = :idStatus");
+            $consultUser->bindParam(':getKeyDelete', $getKeyDelete, PDO::PARAM_STR);
+            $consultUser->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
+            $consultUser->execute();
+
+            if ($consultUser->rowCount() == 1) {
+
+            $getIdUser = $consultUser->fetch(PDO::FETCH_OBJ);
+            $idUser    = (int) $getIdUser->id_user;
+            $idStatus  = (int) 1;
+
+            $deleteUser = $conn->prepare("UPDATE `tb_user` SET `id_status` = :idStatus WHERE `id_user` = :idUser AND `hash` = :getKeyDelete");
+            $deleteUser->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
+            $deleteUser->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+            $deleteUser->bindParam(':getKeyDelete', $getKeyDelete, PDO::PARAM_STR);
+            $deleteUser->execute();
+
+            $resArray->deleteData = TRUE;
+            $resArray->redirect = 'public/';
+            } else {
+            $resArray->error = 'Erro Interno, tente novamente mais tarde!';
+            }
+
+            echo json_encode($resArray);
+        } else {
+            exit("Acesso Negado!");
+        }
+        
     }
 }

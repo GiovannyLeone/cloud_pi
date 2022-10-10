@@ -1,10 +1,12 @@
 <?php
 include_once('../controller/class/class.user.php');
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-$userEmail      = $_POST["updateEmailUser"];
-$username       = $_POST["updateLoginUser"];
-$userPassword   = $_POST["updatePassUser"];
-$hash           = $_POST["updateHashUser"];
+header("Content-Type: application/json");
+$data = (object) json_decode(file_get_contents('php://input'), true);
+$userEmail      = $data->updateEmailUser;
+$username       = $data->updateLoginUser;
+$userPassword   = $data->updatePassUser;
+$hash           = $data->updateHashUser;
 $users = new User;
 $users->setUserEmail($userEmail);
 $users->setUsername($username);

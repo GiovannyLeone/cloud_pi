@@ -3,16 +3,18 @@ include_once('../controller/class/class.profile.php');
 include_once('../controller/class/class.user.php');
 include_once('../controller/class/class.cloudcode.php');
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-$cloudCode = $_POST['codeCloud'];
-$profileName = $_POST['profileName'];
-$profileAge = $_POST['profileAge'];
-$biographyProfile = $_POST['biographyProfile'];
-$idCountry = $_POST['idCountry'];
-$idState = $_POST['idState'];
-$pathImage = $_POST['pathImage'];
-$extensionImg = $_POST['extensionImg'];
-$alternativeImage = $_POST['alternativeImage'];
-$keyHashUser = $_POST['keyIdentityUser'];
+header("Content-Type: application/json");
+$data = (object) json_decode(file_get_contents('php://input'), true);
+$cloudCode = $data->codeCloud;
+$profileName = $data->profileName;
+$profileAge = $data->profileAge;
+$biographyProfile = $data->biographyProfile;
+$idCountry = $data->idCountry;
+$idState = $data->idState;
+$pathImage = $data->pathImage;
+$extensionImg = $data->extensionImg;
+$alternativeImage = $data->alternativeImage;
+$keyHashUser = $data->keyIdentityUser;
 
 // Cloud Code
 
