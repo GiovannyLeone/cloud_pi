@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $users->setUsername($username);
     $users->setUserPassoword($userPassword, $userEmail);
     $users->setHash($userPassword, $userEmail);
+    $users->setAccessToken($userPassword, $userEmail);
     $users->setUpdateHash($hash);
     $users->updatePasswordUser();
 } else {

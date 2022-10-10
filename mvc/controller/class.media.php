@@ -1,49 +1,49 @@
 <?php
 class Media
 {
-    private string $pathImage;
-    private string $alternativeImage;
-    private int $idTypeImage;
+    private string $pathmMedia;
+    private string $alternativeMedia;
+    private int $idTypemMedia;
     private int $idStatus;
 
     // Dados Media
-    public function setPathImage(string $pathImage)
+    public function setPathMedia(string $pathMedia)
     {
-        return $this->pathImage = $pathImage;
+        return $this->pathMedia = $pathMedia;
     }
 
-    public function getPathImage(string $pathImage)
+    public function getPathMedia()
     {
-        return $this->pathImage;
+        return $this->pathMedia;
     }
 
-    public function setAlternativeImage(string $alternativeImage)
+    public function setAlternativeMedia(string $alternativeMedia)
     {
-        if ($alternativeImage == "profile/") {
-            $alternativeImage = 'Profile Photo';
-            return $this->alternativeImage = $alternativeImage;
-        } else if ($alternativeImage == "posts/") {
-            $alternativeImage = 'Publication';
-            return $this->alternativeImage = $alternativeImage;
+        if ($alternativeMedia == "profile/") {
+            $alternativeMedia = 'Profile Photo';
+            return $this->alternativeMedia = $alternativeMedia;
+        } else if ($alternativeMedia == "posts/") {
+            $alternativeMedia = 'Publication';
+            return $this->alternativeMedia = $alternativeMedia;
         } else{
-            $alternativeImage = '';
-            return $this->alternativeImage = $alternativeImage;
+            $alternativeMedia = '';
+            return $this->alternativeMedia = $alternativeMedia;
         }
     }
 
-    public function getAlternativeImage(string $alternativeImage)
+    public function getAlternativeMedia()
     {
-        return $this->alternativeImage;
+        return $this->alternativeMedia;
     }
 
-    public function setIdTypeImage(int $idTypeImage)
+    public function setIdTypeMedia(int $idTypeMedia)
     {
-        return $this->idTypeImage = $idTypeImage;
+        return $this->idTypeMedia = $idTypeMedia;
     }
 
-    public function getIdTypeImage(int $idTypeImage)
+    public function getIdTypeMedia()
     {
-        return $this->idTypeImage;
+        return $this->idTypeMedia;
     }
 
     public function setIdStatus(int $idStatus)
@@ -51,7 +51,7 @@ class Media
         return $this->idStatus = $idStatus;
     }
 
-    public function getIdStatus(int $idStatus)
+    public function getIdStatus()
     {
         return $this->idStatus;
     }
@@ -63,23 +63,23 @@ class Media
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
             $resArray = [];
-            $pathImage          = (string) $this->pathImage;
-            $alternativeImage   = (string) $this->alternativeImage;
-            $idTypeImage        = (int)    $this->idTypeImage;
+            $pathMedia          = (string) $this->pathMedia;
+            $alternativeMedia   = (string) $this->alternativeMedia;
+            $idTypeMedia        = (int)    $this->idTypeMedia;
             $idStatus           = (int)    2;
 
-            if (isset($pathImage) && isset($alternativeImage) && isset($idTypeImage) && isset($idStatus)) {
+            if (isset($pathMedia) && isset($alternativeMedia) && isset($idTypeMedia) && isset($idStatus)) {
 
-                $insertMedia = $conn->prepare("INSERT INTO tb_image (path_image, alternative_image, id_type_image, id_status) 
+                $insertMedia = $conn->prepare("INSERT INTO tb_media (path_media, alternative_media, id_type_media, id_status) 
                 VALUES(
-                    :pathImage,
-                    :alternativeImage,
-                    :idTypeImage,
+                    :pathMedia,
+                    :alternativeMedia,
+                    :idTypeMedia,
                     :idStatus
                     )");
-                $insertMedia->bindParam(':pathImage', $pathImage, PDO::PARAM_STR);
-                $insertMedia->bindParam(':alternativeImage', $alternativeImage, PDO::PARAM_STR);
-                $insertMedia->bindParam(':idTypeImage', $idTypeImage, PDO::PARAM_INT);
+                $insertMedia->bindParam(':pathMedia', $pathMedia, PDO::PARAM_STR);
+                $insertMedia->bindParam(':alternativeMedia', $alternativeMedia, PDO::PARAM_STR);
+                $insertMedia->bindParam(':idTypeMedia', $idTypeMedia, PDO::PARAM_INT);
                 $insertMedia->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
                 $insertMedia->execute();
 
@@ -89,22 +89,22 @@ class Media
         }
         echo json_encode($resArray);
     }
-    public function reqIdMedia(string $pathImage, string $alternativeImage, int $idTypeImage)
+    public function reqIdMedia(string $pathMedia, string $alternativeMedia, int $idTypeMedia)
     {
         require '../db/connect.php';
         $resArray = [];
         $idStatus           = (int)    2;
-        if ( isset($pathImage) && isset($alternativeImage) && isset($idTypeImage) ) {
-            $consultMedia = $conn->prepare("SELECT * FROM tb_image WHERE path_image = :pathImage AND
-            alternative_image = :alternativeImage AND id_type_image  = :idTypeImage AND id_status = :idStatus LIMIT 1");
-            $consultMedia->bindParam(':pathImage', $pathImage, PDO::PARAM_STR);
-            $consultMedia->bindParam(':alternativeImage', $alternativeImage, PDO::PARAM_STR);
-            $consultMedia->bindParam(':idTypeImage', $idTypeImage, PDO::PARAM_INT);
+        if ( isset($pathMedia) && isset($alternativeMedia) && isset($idTypeMedia) ) {
+            $consultMedia = $conn->prepare("SELECT * FROM tb_media WHERE path_media = :pathMedia AND
+            alternative_media = :alternativeMedia AND id_type_media  = :idTypeMedia AND id_status = :idStatus LIMIT 1");
+            $consultMedia->bindParam(':pathMedia', $pathMedia, PDO::PARAM_STR);
+            $consultMedia->bindParam(':alternativeMedia', $alternativeMedia, PDO::PARAM_STR);
+            $consultMedia->bindParam(':idTypeMedia', $idTypeMedia, PDO::PARAM_INT);
             $consultMedia->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
             $consultMedia->execute();
             if ($consultMedia->rowCount() === 1) {
                 $getMedia = $consultMedia->fetch(PDO::FETCH_OBJ);
-                $resIdMedia = (int) $getMedia->id_image;
+                $resIdMedia = (int) $getMedia->id_media;
                 return (int) $resIdMedia;
             }
         }

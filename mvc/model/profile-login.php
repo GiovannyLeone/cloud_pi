@@ -11,10 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $biographyProfile   = $data->biographyProfile;
     $idCountry          = $data->idCountry;
     $idState            = $data->idState;
-    $pathImage          = $data->pathImage;
+    $pathMedia          = $data->pathImage;
     $extensionImg       = $data->extensionImg;
-    $alternativeImage   = $data->alternativeImage;
-    $keyHashUser        = $data->keyIdentityUser;
+    $alternativeMedia   = $data->alternativeImage;
+    $keyIdUser          = $data->keyIdentityUser;
 
     // Cloud Code
 
@@ -24,25 +24,25 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $classCloudCode->registerCloudCode();
 
     $classMedia = new Media;
-    $classMedia->setPathImage($pathImage);
-    $classMedia->setAlternativeImage($alternativeImage);
-    $classMedia->setIdTypeImage($extensionImg);
+    $classMedia->setPathMedia($pathMedia);
+    $classMedia->setAlternativeMedia($alternativeMedia);
+    $classMedia->setIdTypeMedia($extensionImg);
     $classMedia->addMedia();
 
 
     $profile = new profile;
-    $profile->setPathImage($pathImage);
-    $profile->setAlternativeImage($alternativeImage);
-    $profile->setIdTypeImage($extensionImg);
+    $profile->setPathMedia($pathMedia);
+    $profile->setAlternativeMedia($alternativeMedia);
+    $profile->setIdTypeMedia($extensionImg);
 
     $profile->setCloudCode($cloudCode);
     $profile->setName($profileName);
     $profile->setAge($profileAge);
     $profile->setBiographyProfile($biographyProfile);
     $profile->setIdLocation($idCountry, $idState);
-    // $profile->setIdImage($pathImage);
+    // $profile->setIdMedia($pathMedia);
     // $profile->setHash($keyHashUser);
-    $profile->registerProfile($keyHashUser);
+    $profile->registerProfile($keyIdUser);
 } else {
     exit("Acesso Negado!");
 }

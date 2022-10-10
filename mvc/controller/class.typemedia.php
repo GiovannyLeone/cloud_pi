@@ -1,18 +1,18 @@
 <?php
 class Media
 {
-    private string $typeImage;
+    private string $typeMedia;
     private int $idStatus;
 
     // Dados Media
-    public function setTypeImage(string $typeImage)
+    public function setTypeMedia(string $typeMedia)
     {
-        return $this->typeImage = $typeImage;
+        return $this->typeMedia = $typeMedia;
     }
 
-    public function getTypeImage(string $typeImage)
+    public function getTypeMedia()
     {
-        return $this->typeImage;
+        return $this->typeMedia;
     }
 
     public function setIdStatus(int $idStatus)
@@ -20,7 +20,7 @@ class Media
         return $this->idStatus = $idStatus;
     }
 
-    public function getIdStatus(int $idStatus)
+    public function getIdStatus()
     {
         return $this->idStatus;
     }

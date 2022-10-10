@@ -8,7 +8,7 @@ class Profile extends CloudCode
     private int $age;
     private string $biographyProfile;   
     private int $idLocation;   
-    private int $idImage;   
+    private int $idMedia;   
     private int $idUser; 
     
 
@@ -93,14 +93,14 @@ class Profile extends CloudCode
         return $this->idLocation;
     }
 
-    public function setIdImage(int $idImage)
+    public function setIdMedia(int $idMedia)
     {
-        return $this->idImage = $idImage;
+        return $this->idMedia = $idMedia;
     }
 
-    public function getIdImage(int $idImage)
+    public function getIdMedia(int $idMedia)
     {
-        return $this->idImage;
+        return $this->idMedia;
     }
 
     public function setIdUser(int $idUser)
@@ -113,48 +113,48 @@ class Profile extends CloudCode
         return $this->idUser;
     }
 
-    public function setPathImage(string $pathImage)
+    public function setPathMedia(string $pathMedia)
     {
-        return $this->pathImage = $pathImage;
+        return $this->pathMedia = $pathMedia;
     }
 
-    public function getPathImage(string $pathImage)
+    public function getPathMedia()
     {
-        return $this->pathImage;
+        return $this->pathMedia;
     }
 
-    public function setAlternativeImage(string $alternativeImage)
+    public function setAlternativeMedia(string $alternativeMedia)
     {
-        if ($alternativeImage === "profile/") {
-            $alternativeImage = 'Profile Photo';
-            return $this->alternativeImage = $alternativeImage;
-        } else if ($alternativeImage === "posts/") {
-            $alternativeImage = 'Publication';
-            return $this->alternativeImage = $alternativeImage;
+        if ($alternativeMedia === "profile/") {
+            $alternativeMedia = 'Profile Photo';
+            return $this->alternativeMedia = $alternativeMedia;
+        } else if ($alternativeMedia === "posts/") {
+            $alternativeMedia = 'Publication';
+            return $this->alternativeMedia = $alternativeMedia;
 
         } else{
-            $alternativeImage = '';
-            return $this->alternativeImage = $alternativeImage;
+            $alternativeMedia = '';
+            return $this->alternativeMedia = $alternativeMedia;
         }
     }
 
-    public function getAlternativeImage(string $alternativeImage)
+    public function getAlternativeMedia()
     {
-        return $this->alternativeImage;
+        return $this->alternativeMedia;
     }
 
-    public function setIdTypeImage(int $idTypeImage)
+    public function setIdTypeMedia(int $idTypeMedia)
     {
-        return $this->idTypeImage = $idTypeImage;
+        return $this->idTypeMedia = $idTypeMedia;
     }
 
-    public function getIdTypeImage(int $idTypeImage)
+    public function getIdTypeMedia()
     {
-        return $this->idTypeImage;
+        return $this->idTypeMedia;
     }
 
 
-    public function registerProfile(string $keyHashUser)
+    public function registerProfile(string $keyIdUser)
     {
         require '../db/connect.php';
 
@@ -162,32 +162,31 @@ class Profile extends CloudCode
             header("Content-Type: application/json");
             $resArray = (object) [];
 
-            $keyHash = $keyHashUser;
-
-            $consultUser = $conn->prepare("SELECT id_user FROM tb_user WHERE hash = :userHash LIMIT 1");
-            $consultUser->bindParam(':userHash', $keyHash, PDO::PARAM_STR);
+            $keyUser = (string) $keyIdUser;
+            $consultUser = $conn->prepare("SELECT id_user FROM tb_user WHERE access_token = :keyUser LIMIT 1");
+            $consultUser->bindParam(':keyUser', $keyUser, PDO::PARAM_STR);
             $consultUser->execute();
 
             if ($consultUser->rowCount() === 1) {
                 // Pegando dados para construir Profile
-                $nameProfile = $this->name;
-                $ageProfile = $this->age;
-                $biographyProfile = $this->biographyProfile;
-                $idLocation = $this->idLocation;
+                $nameProfile        = $this->name;
+                $ageProfile         = $this->age;
+                $biographyProfile   = $this->biographyProfile;
+                $idLocation         = $this->idLocation;
                 
 
-                $existUser = $consultUser->fetch(PDO::FETCH_OBJ);
-                $idUser = (int) $existUser->id_user;
+                $existUser  = $consultUser->fetch(PDO::FETCH_OBJ);
+                $idUser     = (int) $existUser->id_user;
 
-                $resArray['idLocation'] = $idLocation;
+                $resArray->idLocation = $idLocation;
                 if ($nameProfile && $ageProfile && $biographyProfile && $idLocation && $idUser) {
                     
                     $idCloudCode = (int) $this->reqIdCloudCode();
 
-                    $pathImage          = (string) $this->pathImage;
-                    $alternativeImage   = (string) $this->alternativeImage;
-                    $idTypeImage        = (int)    $this->idTypeImage;
-                    $idImage            = (int) $this->reqIdMedia($pathImage, $alternativeImage, $idTypeImage);
+                    $pathMedia          = (string) $this->pathMedia;
+                    $alternativeMedia   = (string) $this->alternativeMedia;
+                    $idTypeMedia        = (int)    $this->idTypeMedia;
+                    $idMedia            = (int) $this->reqIdMedia($pathMedia, $alternativeMedia, $idTypeMedia);
                     
 
                     $consultIdCloudCode = $conn->prepare("SELECT id_cloud_code FROM tb_cloud_code WHERE id_cloud_code = :idCloudCode LIMIT 1");
@@ -198,14 +197,14 @@ class Profile extends CloudCode
                     $idCloudCode = (int) $existCloudCode->id_cloud_code;
 
                     if ($idCloudCode) {
-                        $insertProfile = $conn->prepare("INSERT INTO tb_profile (id_cloud_code, name, age, biography_profile, id_location, id_image, id_user) 
+                        $insertProfile = $conn->prepare("INSERT INTO tb_profile (id_cloud_code, name, age, biography_profile, id_location, id_Media, id_user) 
                         VALUES(
                         :cloudCode,
                         :nameProfile,
                         :ageProfile,
                         :bioProfile,
                         :idlocation,
-                        :idImage,
+                        :idMedia,
                         :idUser
                         )");
                         $insertProfile->bindParam(':cloudCode', $idCloudCode, PDO::PARAM_STR);
@@ -213,14 +212,14 @@ class Profile extends CloudCode
                         $insertProfile->bindParam(':ageProfile', $ageProfile, PDO::PARAM_INT);
                         $insertProfile->bindParam(':bioProfile', $biographyProfile, PDO::PARAM_STR);
                         $insertProfile->bindParam(':idlocation', $idLocation, PDO::PARAM_INT);
-                        $insertProfile->bindParam(':idImage', $idImage, PDO::PARAM_INT);
+                        $insertProfile->bindParam(':idMedia', $idMedia, PDO::PARAM_INT);
                         $insertProfile->bindParam(':idUser', $idUser, PDO::PARAM_INT);
                         $insertProfile->execute();
                         $resArray->redirect = TRUE;
                     }
                 }
             } else {
-                $resArray["error"] =  "Don´t Work";
+                $resArray->error =  "Don´t Work";
             }
         }else{
             exit("fora!");

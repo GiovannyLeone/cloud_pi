@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $users->setUserEmail($userEmail);
     $users->setUserPassoword($userPassword, $userEmail);
     $users->setHash($userPassword, $userEmail);
+    $users->setAccessToken($userPassword, $userEmail);
     $users->registerUsers();
 } else {
     exit("Acesso Negado!");

@@ -16,7 +16,7 @@ class User
         return $this->idUser = $idUser;
     }
 
-    public function getIdUser(int $idUser)
+    public function getIdUser()
     {
         return $this->idUser;
     }
@@ -26,7 +26,7 @@ class User
         return $this->username = $username;
     }
 
-    public function getUsername(string $username)
+    public function getUsername()
     {
         return $this->username;
     }
@@ -79,7 +79,7 @@ class User
         return $this->hash = $newHash;
     }
 
-    public function getHash(string $hash)
+    public function getHash()
     {
         return $this->hash;
     }
@@ -89,9 +89,26 @@ class User
         return $this->updateHash = $updateHash;
     }
 
-    public function getUpdateHash(string $updateHash)
+    public function getUpdateHash()
     {
         return $this->updateHash;
+    }
+
+    public function setAccessToken(string $userPassword, string $userEmail)
+    {
+        $userPassword   = md5($userPassword);
+        $md5Hash        = md5($userEmail . $userPassword);
+        $userPassword   = $md5Hash;
+        // Gerando um Token de Acesso, baseado em bcrypt
+        $custoPassword      = '12';
+        $saltPassword       = $userPassword;
+        $accessToken        = crypt($userPassword, '$2b$' . $custoPassword . '$' . $saltPassword . '$');
+        return $this->accessToken = $accessToken;
+    }
+
+    public function getAccessToken()
+    {
+        return $this->accessToken;
     }
 
     public function setIdStatus(string $idStatus)
@@ -99,7 +116,7 @@ class User
         return $this->idStatus = $idStatus;
     }
 
-    public function getIdStatus(string $idStatus)
+    public function getIdStatus()
     {
         return $this->idStatus;
     }
@@ -110,9 +127,9 @@ class User
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
-            $resArray = (object) [];
-            $username = $this->username;
-            $userEmail = strtolower($this->userEmail);
+            $resArray   = (object) [];
+            $username   = $this->username;
+            $userEmail  = strtolower($this->userEmail);
 
             // Verificando se user existe
             $consultSql = $conn->prepare("SELECT username FROM tb_user WHERE username = :username OR user_email = :userEmail  LIMIT 1");
@@ -128,25 +145,27 @@ class User
                 // User não existe
 
                 #Setando Status
-                $criptUserPassword = $this->userPassword;
-                $newHash = $this->hash;
-                $idStatus = (int) 2;
+                $criptUserPassword  = (string) $this->userPassword;
+                $newHash            = (string) $this->hash;
+                $accessToken        = (string) $this->accessToken;
+                $idStatus           = (int) 2;
 
-                $newUser = $conn->prepare("INSERT INTO tb_user (username, user_email, user_password, hash, id_status) VALUES(:username, :userEmail, :userPassword, :hash, :idStatus)");
+                $newUser = $conn->prepare("INSERT INTO tb_user (username, user_email, user_password, hash, access_token, id_status) VALUES(:username, :userEmail, :userPassword, :hash, :accessToken, :idStatus)");
                 $newUser->bindParam(':username', $username, PDO::PARAM_STR);
                 $newUser->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
                 $newUser->bindParam(':userPassword', $criptUserPassword, PDO::PARAM_STR);
                 $newUser->bindParam(':hash', $newHash, PDO::PARAM_STR);
+                $newUser->bindParam(':accessToken', $accessToken, PDO::PARAM_STR);
                 $newUser->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
                 $newUser->execute();
 
                 // Iniciando Sessão
                 session_start();
-                $_SESSION['identityUser'] = (string) $newHash;
+                $_SESSION['identityUser'] = (string) $accessToken;
                 // Mandado resposta para página de cadastrado, redirecionamento e bool
-                $resArray->redirect = 'mvc/view/profile-create/';
+                $resArray->redirect     = 'mvc/view/profile-create/';
                 $resArray->identityUser = $_SESSION['identityUser'];
-                $resArray->is_login = TRUE;
+                $resArray->is_login     = TRUE;
             }
 
             echo json_encode($resArray);
@@ -156,13 +175,12 @@ class User
     }
 
     public function loginUsers()
-    // Class para logar Users
     {
         require('../db/connect.php');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
-            $resArray = (object) [];
+            $resArray   = (object) [];
             $username   = (string) $this->username;
             $userEmail  = (string) strtolower($this->userEmail);
             $idStatus   = (int) 2;
@@ -184,12 +202,12 @@ class User
 
 
                 // Var de sessão
-                $idUserDB       = (int) $existUser->id_user;
-                $loginUserDB    = (string) $existUser->username;
-                $loginUserEmail = (string) $existUser->user_email;
-                $loginPassword  = (string) $existUser->user_password;
-                $identityUser   = (string) $existUser->hash;
-                $criptUserPassword = $this->setUserPassoword($this->userJustPassword, $loginUserEmail);
+                $idUserDB           = (int) $existUser->id_user;
+                $loginUserDB        = (string) $existUser->username;
+                $loginUserEmail     = (string) $existUser->user_email;
+                $loginPassword      = (string) $existUser->user_password;
+                $identityUser       = (string) $existUser->access_token;
+                $criptUserPassword  = $this->setUserPassoword($this->userJustPassword, $loginUserEmail);
 
                 // Encripty Pass
                 # if her
@@ -200,12 +218,12 @@ class User
 
                     session_start();
 
-                    $_SESSION['idUserSe'] = $idUserDB;
-                    $_SESSION['loginUserSe'] = $loginUserDB;
-                    $_SESSION['loginPasswordSe'] = $loginPassword;
-                    $_SESSION['identityUser'] = $identityUser;
+                    $_SESSION['idUserSe']           = $idUserDB;
+                    $_SESSION['loginUserSe']        = $loginUserDB;
+                    $_SESSION['loginPasswordSe']    = $loginPassword;
+                    $_SESSION['identityUser']       = $identityUser;
 
-                    $resArray->redirect = 'public/feed';
+                    $resArray->redirect     = 'public/feed';
                     $resArray->identityUser = $_SESSION['identityUser'];
                 } else {
                     $resArray->error = "Os dados não são validos!";
@@ -219,16 +237,17 @@ class User
             exit("Fora!");
         }
     }
+
     public function verifyRecoveryPassUser()
     {
         require('../db/connect.php');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
-            $resArray = (object) [];
-            $username = $this->username;
-            $userEmail = strtolower($this->userEmail);
-            $idStatus = 2;
+            $resArray   = (object) [];
+            $username   = $this->username;
+            $userEmail  = strtolower($this->userEmail);
+            $idStatus   = 2;
 
             // Verificando se User Existe
             $consultSql = $conn->prepare("SELECT username, user_email, hash, id_status FROM tb_user WHERE username = :username AND user_email = :userEmail AND id_status = :idStatus LIMIT 1");
@@ -249,12 +268,12 @@ class User
 
                 $urlRecovery = $baseURL . "/recovery-password?idRec=" . $hash;
 
-                $resArray->username = $username;
-                $resArray->userEmail = $userEmail;
-                $resArray->urlHash = $urlRecovery;
-                $resArray->redirect = 'http://localhost/cloud_pi/mvc/view/recovery-pass';
-                $resArray->date = date('d/m/Y');
-                $resArray->time = date('H:i');
+                $resArray->username     = (string) $username;
+                $resArray->userEmail    = (string) $userEmail;
+                $resArray->urlHash      = (string) $urlRecovery;
+                $resArray->redirect     = (string) 'http://localhost/cloud_pi/mvc/view/recovery-pass';
+                $resArray->date         = date('d/m/Y');
+                $resArray->time         = date('H:i');
             } else {
                 $resArray->error = (string) "Conta não encontrada :(";
             }
@@ -269,12 +288,13 @@ class User
         require('../db/connect.php');
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Content-Type: application/json");
-            $resArray = (object) [];
-            $username = $this->username;
-            $userEmail = strtolower($this->userEmail);
-            $userPassword = $this->userPassword;
-            $userHash = $this->updateHash;
-            $idStatus = (int) 2;
+            $resArray       = (object) [];
+            $username       = $this->username;
+            $userEmail      = strtolower($this->userEmail);
+            $userPassword   = $this->userPassword;
+            $userHash       = $this->updateHash;
+            $accessToken    = $this->accessToken;
+            $idStatus       = (int) 2;
 
             // Verificando se User Existe
             $consultSql = $conn->prepare("SELECT username, user_email, hash, id_status FROM tb_user WHERE username = :username AND user_email = :userEmail AND hash = :hash AND id_status = :idStatus LIMIT 1");
@@ -291,23 +311,21 @@ class User
                 $baseURL = "http://";
                 $baseURL .= "localhost/cloud_pi";
 
-                $existUser = $consultSql->fetch(PDO::FETCH_OBJ);
-                $UsernameSession = (string) $existUser->username;
-                $userEmailSession = (string) $existUser->user_email;
-
-                $userPassword = $this->userPassword;
-                $userEmail = strtolower($this->userEmail);
-                $criptUserPassword = $this->userPassword;
-                $newHash = $this->hash;
+                $userEmail          = (string) strtolower($this->userEmail);
+                $criptUserPassword  = (string) $this->userPassword;
+                $newHash            = (string) $this->hash;
+                $accessToken        = (string) $this->accessToken;
 
                 $updatePasswordUser = $conn->prepare("UPDATE tb_user SET
-                user_password = :criptUserPassword,
-                hash = :newHash
+                user_password   = :criptUserPassword,
+                hash            = :newHash,
+                access_token    = :accessToken
                 WHERE username = :username AND user_email = :user_email");
                 $updatePasswordUser->bindParam(':username', $username, PDO::PARAM_STR);
                 $updatePasswordUser->bindParam(':user_email', $userEmail, PDO::PARAM_STR);
                 $updatePasswordUser->bindParam(':criptUserPassword', $criptUserPassword, PDO::PARAM_STR);
                 $updatePasswordUser->bindParam(':newHash', $newHash, PDO::PARAM_STR);
+                $updatePasswordUser->bindParam(':accessToken', $accessToken, PDO::PARAM_STR);
                 $updatePasswordUser->execute();
 
                 $resArray->redirect = 'http://localhost/cloud_pi/public/';
@@ -316,6 +334,7 @@ class User
         } else {
         }
     }
+
     public function deleteUser(string $getKeyDelete)
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -325,7 +344,7 @@ class User
             $resArray = (object) [];
             $idStatus = (int) 2;
             
-            $consultUser = $conn->prepare("SELECT `id_user`, `hash`, `id_status` FROM tb_user WHERE `hash` = :getKeyDelete AND  `id_status` = :idStatus");
+            $consultUser = $conn->prepare("SELECT `id_user`, `hash`, `id_status` FROM tb_user WHERE `access_token` = :getKeyDelete AND  `id_status` = :idStatus");
             $consultUser->bindParam(':getKeyDelete', $getKeyDelete, PDO::PARAM_STR);
             $consultUser->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
             $consultUser->execute();
@@ -336,7 +355,7 @@ class User
             $idUser    = (int) $getIdUser->id_user;
             $idStatus  = (int) 1;
 
-            $deleteUser = $conn->prepare("UPDATE `tb_user` SET `id_status` = :idStatus WHERE `id_user` = :idUser AND `hash` = :getKeyDelete");
+            $deleteUser = $conn->prepare("UPDATE `tb_user` SET `id_status` = :idStatus WHERE `id_user` = :idUser AND `access_token` = :getKeyDelete");
             $deleteUser->bindParam(':idStatus', $idStatus, PDO::PARAM_INT);
             $deleteUser->bindParam(':idUser', $idUser, PDO::PARAM_INT);
             $deleteUser->bindParam(':getKeyDelete', $getKeyDelete, PDO::PARAM_STR);
