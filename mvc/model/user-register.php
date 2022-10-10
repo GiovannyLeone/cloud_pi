@@ -1,10 +1,10 @@
 <?php
-include_once('../controller/class/class.user.php');
+include_once('../controller/class.user.php');
 
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    header("Content-Type: application/json");
-    $data = (object) json_decode(file_get_contents('php://input'), true);
+    header("Content-type: application/json; charset=utf8");
+    $data           = (object) json_decode(file_get_contents('php://input'), true);
     $username       = $data->setFormUsername;
     $userEmail      = $data->setFormEmail;
     $userPassword   = $data->setFormPassword;
