@@ -18,7 +18,7 @@
             <form method="POST">
               <div class="form-group myGrid">
                 <input type="text" placeholder="Username" name="setFormUsername" id="setFormUsername" />
-                <input type="text" placeholder="Password" name="setFormPassword" id="setFormPassword" />
+                <input type="password" placeholder="Password" name="setFormPassword" id="setFormPassword" />
                 <input type="email" placeholder="Email" name="setFormEmail" id="setFormEmail" />
               </div>
               <a id="goLeft" class="off">Entrar</a>
@@ -33,7 +33,7 @@
             <form method="POST">
               <div class="form-group">
                 <input type="text" placeholder="Username" name="getFormUsername" id="getFormUsername" />
-                <input type="text" placeholder="Password" name="getFormPassword" id="getFormPassword" />
+                <input type="password" placeholder="Password" name="getFormPassword" id="getFormPassword" />
               </div>
               <a id="goRight" class="off">Cadastre-se</a>
               <button id="btnGetUsers" type="submit">Entrar</button>
